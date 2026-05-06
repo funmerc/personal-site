@@ -1,7 +1,16 @@
 <script setup lang="ts">
-  import Landing from './components/Landing.vue'
+import SiteNav from './components/SiteNav.vue'
+import SiteFooter from './components/SiteFooter.vue'
 </script>
 
 <template>
-  <Landing />
+  <SiteNav />
+  <main>
+    <RouterView v-slot="{ Component }">
+      <Transition name="page-flip" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
+  </main>
+  <SiteFooter />
 </template>

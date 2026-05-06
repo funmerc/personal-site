@@ -13,10 +13,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.32"
+    "vue": "^3.5.32",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.2.4",
     "@types/node": "^24.12.2",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/eslint-config-prettier": "^10.2.0",
@@ -25,6 +27,7 @@
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
     "prettier": "^3.8.3",
+    "tailwindcss": "^4.2.4",
     "typescript": "~6.0.2",
     "vite": "^8.0.10",
     "vue-tsc": "^3.2.7"

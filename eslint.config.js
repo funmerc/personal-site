@@ -24,5 +24,12 @@ export default [
     },
     js.configs.recommended,
     ...pluginVue.configs['flat/recommended'],
+    {
+        name: 'app/page-components',
+        files: ['src/pages/**/*.vue'],
+        rules: {
+            'vue/multi-word-component-names': 'off',
+        },
+    },
     skipFormatting,
 ]
