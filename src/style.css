@@ -18,7 +18,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Layout */
-  --radius-panel: 12px;
+  --radius-panel: 0;
 
   /* Motion */
   --ease-snap: cubic-bezier(0.5, 1.6, 0.4, 1);
@@ -26,15 +26,26 @@
   --duration-page: 400ms;
 }
 
-/* Dark mode token overrides */
+/* Dark mode tokens. Two activation paths:
+   1. System prefers-color-scheme is dark and the user hasn't overridden to light
+   2. User explicitly toggled dark via data-theme="dark"
+   The data-theme attribute (set by useTheme.ts) is the source of truth when present. */
 @media (prefers-color-scheme: dark) {
-  @theme {
+  :root:not([data-theme='light']) {
     --color-ink: #FAF7F2;
     --color-paper: #252525;
     --color-bg: #1A1A1A;
     --color-muted: #999999;
     --color-halftone: rgba(250, 247, 242, 0.12);
   }
+}
+
+:root[data-theme='dark'] {
+  --color-ink: #FAF7F2;
+  --color-paper: #252525;
+  --color-bg: #1A1A1A;
+  --color-muted: #999999;
+  --color-halftone: rgba(250, 247, 242, 0.12);
 }
 
 /* ============================================================
@@ -135,29 +146,39 @@
 }
 
 /* ============================================================
-   PAGE FLIP TRANSITION
-   Used by Vue's <Transition name="page-flip"> in App.vue
+   ROUTE PAGE PANEL
+   Each route renders a <section> directly inside <main>. Style it as a
+   permanent comic panel.
    ============================================================ */
 
-.page-flip-enter-active,
-.page-flip-leave-active {
+main > section {
+  flex: 1;
+  background: var(--color-paper);
+  border: 3px solid var(--color-ink);
+  padding: 2rem;
+}
+
+/* ============================================================
+   PAGE TRANSITION
+   Used by Vue's <Transition name="page-slide" mode="out-in"> in App.vue.
+   Quiet horizontal slide. The direction is driven by --slide-direction
+   set on the layout element (1 = forward, -1 = backward, 0 = same
+   section / drill-in, which becomes a pure fade).
+   ============================================================ */
+
+.page-slide-enter-active,
+.page-slide-leave-active {
   transition:
-          transform var(--duration-page) var(--ease-snap),
-          opacity var(--duration-page) ease-out;
+          transform 220ms var(--ease-snap),
+          opacity 200ms ease-out;
 }
 
-.page-flip-enter-from {
-  transform: translateX(40px) rotate(1.5deg);
+.page-slide-leave-to {
+  transform: translateX(calc(var(--slide-direction, 0) * -24px));
   opacity: 0;
 }
 
-.page-flip-leave-to {
-  transform: translateX(-40px) rotate(-1.5deg);
+.page-slide-enter-from {
+  transform: translateX(calc(var(--slide-direction, 0) * 24px));
   opacity: 0;
-}
-
-/* During the flip, hide the leaving page beneath the entering one */
-.page-flip-leave-active {
-  position: absolute;
-  inset: 0;
 }
