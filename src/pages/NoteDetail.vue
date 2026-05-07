@@ -1,4 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { useRouteMeta } from '../composables/useRouteMeta'
+
+  useRouteMeta({
+    title: 'Note',
+    description: 'Note writeup.',
+  })
+</script>
 
 <template>
   <section>
