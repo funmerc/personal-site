@@ -2,8 +2,8 @@
   import { computed } from 'vue'
   import { useTheme } from '../composables/useTheme'
   import ComicPanel from '../components/ComicPanel.vue'
-  import comicHero from '../assets/comic-hero.png'
-  import comicHeroNight from '../assets/comic-hero-night.png'
+  import comicHero from '../assets/comic-hero.avif'
+  import comicHeroNight from '../assets/comic-hero-night.avif'
 
   const { effective } = useTheme()
   const heroSrc = computed(() =>
@@ -16,7 +16,7 @@
     <div class="grid">
       <ComicPanel class="cell cell-intro" :rotate="-0.8" size="lg">
         <p class="kicker">
-          <span class="kicker-tag">Working in public</span>
+          <span class="kicker-tag">Build happiness</span>
         </p>
         <h1 class="name">Jason Rice</h1>
         <p class="tagline">Building products that people enjoy using.</p>
