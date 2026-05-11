@@ -12,7 +12,7 @@
   <section class="page">
     <ComicPanel class="page-frame" :rotate="0.6" size="lg">
       <h1>About</h1>
-      <p class="lead">Drafting this one — who I am and what I'm building.</p>
+      <p class="lead">Still drafting this one which will be about who I am and what I'm building.</p>
     </ComicPanel>
   </section>
 </template>
