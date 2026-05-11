@@ -126,6 +126,7 @@ v-else
     transform: skew(-12deg) rotate(-0.5deg);
     transition: transform var(--duration-quick) var(--ease-snap);
     font-family: inherit;
+    will-change: transform;
   }
 
   .toggle {

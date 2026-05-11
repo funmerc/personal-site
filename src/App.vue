@@ -1,18 +1,26 @@
 <script setup lang="ts">
+  import { computed } from 'vue'
+  import { useRoute } from 'vue-router'
   import { useHead } from '@unhead/vue'
   import SiteNav from './components/SiteNav.vue'
   import SiteFooter from './components/SiteFooter.vue'
   import { useNavDirection } from './composables/useNavDirection'
 
   const slideDirection = useNavDirection()
+  const route = useRoute()
 
+  const origin = 'https://jasonrice.me'
   const defaultTitle = 'Jason Rice — Software engineer'
   const defaultDescription =
     'Software engineer working in public — projects, demos, and notes.'
+  const ogImage = `${origin}/og.png`
+
+  const canonical = computed(() => `${origin}${route.path}`)
 
   useHead({
     titleTemplate: (title) =>
       title && title !== defaultTitle ? `${title} · Jason Rice` : defaultTitle,
+    link: [{ rel: 'canonical', href: canonical }],
     meta: [
       { name: 'description', content: defaultDescription },
       { name: 'theme-color', content: '#1A1A1A' },
@@ -20,9 +28,15 @@
       { property: 'og:site_name', content: 'Jason Rice' },
       { property: 'og:title', content: defaultTitle },
       { property: 'og:description', content: defaultDescription },
-      { name: 'twitter:card', content: 'summary' },
+      { property: 'og:url', content: canonical },
+      { property: 'og:image', content: ogImage },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
+      { property: 'og:image:alt', content: 'Jason Rice — Software engineer' },
+      { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: defaultTitle },
       { name: 'twitter:description', content: defaultDescription },
+      { name: 'twitter:image', content: ogImage },
     ],
   })
 </script>

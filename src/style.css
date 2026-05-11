@@ -9,7 +9,7 @@
   --color-paper: #FFFFFF;
   --color-bg: #FAF7F2;
   --color-muted: #6B6B6B;
-  --color-signature: #E63946;
+  --color-signature: #E94B3C;
   --color-halftone: rgba(26, 26, 26, 0.12);
 
   /* Fonts (override Tailwind defaults so font-sans = Inter automatically) */
@@ -194,16 +194,13 @@
 }
 
 /* ============================================================
-   ROUTE PAGE PANEL
-   Each route renders a <section> directly inside <main>. Style it as a
-   permanent comic panel.
+   ROUTE PAGE CONTAINER
+   Each route renders a <section> directly inside <main>. The section is
+   an invisible container — visual framing is done with <ComicPanel>.
    ============================================================ */
 
 main > section {
   flex: 1;
-  background: var(--color-paper);
-  border: 3px solid var(--color-ink);
-  padding: 2rem;
 }
 
 /* ============================================================
