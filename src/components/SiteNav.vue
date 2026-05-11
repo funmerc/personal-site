@@ -81,6 +81,7 @@
     text-decoration: none;
     transform: rotate(-1.5deg);
     transition: transform var(--duration-quick) var(--ease-snap);
+    will-change: transform;
   }
 
   .wordmark:hover {
@@ -101,6 +102,7 @@
     font-family: inherit;
     transform: skew(-12deg) rotate(-0.5deg);
     transition: transform var(--duration-quick) var(--ease-snap);
+    will-change: transform;
   }
 
   .hamburger:hover {
@@ -159,6 +161,7 @@
       background var(--duration-quick) var(--ease-snap),
       color var(--duration-quick) var(--ease-snap),
       transform var(--duration-quick) var(--ease-snap);
+    will-change: transform;
   }
 
   /* counter-skew the inner text so it reads straight */

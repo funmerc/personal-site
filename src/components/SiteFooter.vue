@@ -20,8 +20,9 @@
           @click="toggle"
         >
           <span class="icon">
-            <svg id="theme-flashlight-icon"
-              v-if="effective === 'dark'"
+            <svg
+v-if="effective === 'dark'"
+              id="theme-flashlight-icon"
               width="26"
               height="18"
               viewBox="0 0 26 18"
@@ -59,8 +60,9 @@
               <rect x="11" y="3" width="11" height="12" />
               <rect x="22" y="5" width="2" height="8" />
             </svg>
-            <svg id="theme-sunglasses-icon"
-              v-else
+            <svg
+v-else
+              id="theme-sunglasses-icon"
               width="26"
               height="14"
               viewBox="0 0 26 14"
@@ -124,6 +126,7 @@
     transform: skew(-12deg) rotate(-0.5deg);
     transition: transform var(--duration-quick) var(--ease-snap);
     font-family: inherit;
+    will-change: transform;
   }
 
   .toggle {
