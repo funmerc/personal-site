@@ -29,8 +29,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
@@ -38,7 +38,7 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE: ${{ vars.VITE_BASE || '/' }}
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
