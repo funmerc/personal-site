@@ -1,7 +1,8 @@
 import { copy404 } from './copy-404.js'
+import { generateRss } from './generate-rss.js'
 
 const tasks = {
-  postbuild: [copy404],
+  postbuild: [copy404, generateRss],
 }
 
 async function run(taskName) {

@@ -1,20 +1,31 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import { useTheme } from '../composables/useTheme'
   import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
   import EntryCard from '../components/EntryCard.vue'
+  import ResponsiveImage from '../components/ResponsiveImage.vue'
   import { getDemos } from '../content'
-  import banner from '../assets/comic-hero-zooming.avif'
-  import bannerNight from '../assets/comic-hero-zooming-night.avif'
+  import banner from '../assets/comic-hero-zooming.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
+  import bannerNight from '../assets/comic-hero-zooming-night.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
 
   const demos = getDemos()
 
   const { effective } = useTheme()
-  const bannerSrc = computed(() =>
+  const bannerPicture = computed(() =>
     effective.value === 'dark' ? bannerNight : banner,
   )
+
+  const loaded = ref(false)
+  function onBannerLoad() {
+    loaded.value = true
+  }
+  onMounted(() => {
+    setTimeout(() => {
+      loaded.value = true
+    }, 800)
+  })
 
   useRouteMeta({
     title: 'Demos',
@@ -23,12 +34,14 @@
 </script>
 
 <template>
-  <IndexLayout title="Demos" :rotate-title="0.5">
+  <IndexLayout title="Demos" :rotate-title="0.5" :loading="!loaded">
     <ComicPanel class="banner" :rotate="-0.4" size="sm">
-      <img
+      <ResponsiveImage
         :key="effective"
-        :src="bannerSrc"
+        :picture="bannerPicture"
         alt="Comic-style banner illustration"
+        sizes="(min-width: 56rem) 56rem, 100vw"
+        @load="onBannerLoad"
       />
     </ComicPanel>
 
@@ -63,21 +76,5 @@
     display: block;
     width: 100%;
     height: auto;
-  }
-
-  .lead {
-    margin: 0;
-    color: var(--color-muted);
-    font-family: var(--font-mono), monospace;
-    font-size: 0.95rem;
-  }
-
-  .chips {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
   }
 </style>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { onMounted, ref } from 'vue'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import IndexLayout from '../components/IndexLayout.vue'
   import EntryCard from '../components/EntryCard.vue'
@@ -10,10 +11,17 @@
     title: 'Projects',
     description: "Things I've built and shipped, with the why behind each one.",
   })
+
+  const loaded = ref(false)
+  onMounted(() => {
+    requestAnimationFrame(() => {
+      loaded.value = true
+    })
+  })
 </script>
 
 <template>
-  <IndexLayout title="Projects" :rotate-title="-0.5">
+  <IndexLayout title="Projects" :rotate-title="-0.5" :loading="!loaded">
     <p v-if="!projects.length" class="lead">First entries are being written up.</p>
     <EntryCard
       v-for="(p, i) in projects"
@@ -31,21 +39,3 @@
     </EntryCard>
   </IndexLayout>
 </template>
-
-<style scoped>
-  .lead {
-    margin: 0;
-    color: var(--color-muted);
-    font-family: var(--font-mono), monospace;
-    font-size: 0.95rem;
-  }
-
-  .chips {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-</style>

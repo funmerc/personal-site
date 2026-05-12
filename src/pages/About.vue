@@ -1,24 +1,35 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import { useTheme } from '../composables/useTheme'
   import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
+  import ResponsiveImage from '../components/ResponsiveImage.vue'
   import aboutData from '../data/about.json'
   import educationData from '../data/education.json'
   import workData from '../data/work_experience.json'
   import type { AboutData, EducationData, WorkRole } from '../data/types'
-  import banner from '../assets/comic-hero-banner.avif'
-  import bannerNight from '../assets/comic-hero-banner-night.avif'
+  import banner from '../assets/comic-hero-banner.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
+  import bannerNight from '../assets/comic-hero-banner-night.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
 
   const about = aboutData as AboutData
   const education = educationData as EducationData
   const work = workData as WorkRole[]
 
   const { effective } = useTheme()
-  const bannerSrc = computed(() =>
+  const bannerPicture = computed(() =>
     effective.value === 'dark' ? bannerNight : banner,
   )
+
+  const loaded = ref(false)
+  function onBannerLoad() {
+    loaded.value = true
+  }
+  onMounted(() => {
+    setTimeout(() => {
+      loaded.value = true
+    }, 800)
+  })
 
   useRouteMeta({
     title: 'About',
@@ -27,12 +38,14 @@
 </script>
 
 <template>
-  <IndexLayout title="About" :rotate-title="0.6">
+  <IndexLayout title="About" :rotate-title="0.6" :loading="!loaded">
     <ComicPanel class="banner" :rotate="-0.4" size="sm">
-      <img
+      <ResponsiveImage
         :key="effective"
-        :src="bannerSrc"
+        :picture="bannerPicture"
         alt="Comic-style banner illustration"
+        sizes="(min-width: 56rem) 56rem, 100vw"
+        @load="onBannerLoad"
       />
     </ComicPanel>
 

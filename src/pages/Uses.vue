@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { onMounted, ref } from 'vue'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
@@ -11,10 +12,17 @@
     title: 'Uses',
     description: 'The tools, hardware, and setup I work with.',
   })
+
+  const loaded = ref(false)
+  onMounted(() => {
+    requestAnimationFrame(() => {
+      loaded.value = true
+    })
+  })
 </script>
 
 <template>
-  <IndexLayout title="Uses" :rotate-title="-0.4">
+  <IndexLayout title="Uses" :rotate-title="-0.4" :loading="!loaded">
     <ComicPanel
       v-for="(s, i) in uses.sections"
       :key="s.label"

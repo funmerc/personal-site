@@ -15,12 +15,13 @@ function byDateDesc<T extends { date: string }>(xs: T[]): T[] {
   return [...xs].sort((a, b) => b.date.localeCompare(a.date))
 }
 
+export type RecentItem =
+  | (Project & { kind: 'projects' })
+  | (Demo & { kind: 'demos' })
+  | (Note & { kind: 'notes' })
+
 export function getProjects(): Project[] {
   return byDateDesc(published(projects))
-}
-
-export function getFeaturedProjects(): Project[] {
-  return getProjects().filter((p) => p.featured)
 }
 
 export function getProject(slug: string): Project | undefined {
@@ -41,4 +42,17 @@ export function getNotes(): Note[] {
 
 export function getNote(slug: string): Note | undefined {
   return getNotes().find((n) => n.slug === slug)
+}
+
+/**
+ * The most recent N items across projects, demos, and notes — each tagged
+ * with its `kind` so the caller can route to the right detail page.
+ */
+export function getRecent(limit = 5): RecentItem[] {
+  const all: RecentItem[] = [
+    ...getProjects().map((p) => ({ ...p, kind: 'projects' as const })),
+    ...getDemos().map((d) => ({ ...d, kind: 'demos' as const })),
+    ...getNotes().map((n) => ({ ...n, kind: 'notes' as const })),
+  ]
+  return byDateDesc(all).slice(0, limit)
 }
