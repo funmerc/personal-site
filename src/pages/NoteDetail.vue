@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
   import { useRouteMeta } from '../composables/useRouteMeta'
+  import { useProseLinks } from '../composables/useProseLinks'
   import ComicPanel from '../components/ComicPanel.vue'
   import { getNote } from '../content'
   import { formatDate } from '../utils/formatDate'
@@ -12,6 +13,9 @@
   const bodyHtml = computed(() =>
     note.value ? renderMarkdown(note.value.body) : '',
   )
+
+  const proseEl = ref<HTMLElement | null>(null)
+  useProseLinks(proseEl)
 
   useRouteMeta({
     title: () => note.value?.title ?? 'Note not found',
@@ -30,7 +34,7 @@
             <time :datetime="note.date">{{ formatDate(note.date) }}</time>
           </p>
         </header>
-        <div class="prose" v-html="bodyHtml" />
+        <div ref="proseEl" class="prose" v-html="bodyHtml" />
         <ul v-if="note.tags?.length" class="tags">
           <li v-for="t in note.tags" :key="t" class="chip">{{ t }}</li>
         </ul>

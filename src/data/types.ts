@@ -27,3 +27,12 @@ export interface WorkRole {
   jobLocation: string
   sections: WorkSection[]
 }
+
+export interface UsesSection {
+  label: string
+  items: string[]
+}
+
+export interface UsesData {
+  sections: UsesSection[]
+}

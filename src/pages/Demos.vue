@@ -1,11 +1,20 @@
 <script setup lang="ts">
+  import { computed } from 'vue'
   import { useRouteMeta } from '../composables/useRouteMeta'
+  import { useTheme } from '../composables/useTheme'
   import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
   import EntryCard from '../components/EntryCard.vue'
   import { getDemos } from '../content'
+  import banner from '../assets/comic-hero-zooming.avif'
+  import bannerNight from '../assets/comic-hero-zooming-night.avif'
 
   const demos = getDemos()
+
+  const { effective } = useTheme()
+  const bannerSrc = computed(() =>
+    effective.value === 'dark' ? bannerNight : banner,
+  )
 
   useRouteMeta({
     title: 'Demos',
@@ -15,6 +24,14 @@
 
 <template>
   <IndexLayout title="Demos" :rotate-title="0.5">
+    <ComicPanel class="banner" :rotate="-0.4" size="sm">
+      <img
+        :key="effective"
+        :src="bannerSrc"
+        alt="Comic-style banner illustration"
+      />
+    </ComicPanel>
+
     <ComicPanel v-if="!demos.length" :rotate="0.3" size="md">
       <p class="lead">First batch of experiments is being prepped.</p>
     </ComicPanel>
@@ -36,6 +53,18 @@
 </template>
 
 <style scoped>
+  .banner {
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   .lead {
     margin: 0;
     color: var(--color-muted);

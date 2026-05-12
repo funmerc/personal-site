@@ -36,91 +36,83 @@
       />
     </ComicPanel>
 
-    <ComicPanel class="content" :rotate="0.3" size="lg">
-      <details class="acc" open>
-        <summary><span>Why</span></summary>
-        <div class="acc-body">
-          <p class="prose">{{ about.why }}</p>
-        </div>
-      </details>
+    <div class="grid">
+      <ComicPanel class="section" :rotate="-0.3" size="md">
+        <h2 class="section-title">Why</h2>
+        <p class="prose">{{ about.why }}</p>
+      </ComicPanel>
 
-      <details class="acc">
-        <summary><span>What I'm into</span></summary>
-        <div class="acc-body">
-          <h3 class="sub">Interests</h3>
-          <ul class="chips">
-            <li v-for="i in about.interests" :key="i" class="chip">{{ i }}</li>
-          </ul>
-          <h3 class="sub">Goals</h3>
-          <ul class="chips">
-            <li v-for="g in about.goals" :key="g" class="chip">{{ g }}</li>
-          </ul>
-        </div>
-      </details>
+      <ComicPanel class="section" :rotate="0.4" size="md">
+        <h2 class="section-title">Where I studied</h2>
+        <article
+          v-for="item in education.items"
+          :key="item.name + item.graduation_date"
+          class="entry"
+        >
+          <header class="entry-head">
+            <h3 class="entry-title">{{ item.degree_title }}</h3>
+            <p class="entry-meta">
+              <span>{{ item.name }}</span>
+              <span aria-hidden="true">·</span>
+              <span>{{ item.graduation_date }}</span>
+            </p>
+          </header>
+          <div class="entry-section">
+            <h4 class="entry-section-label">Relevant coursework</h4>
+            <ul class="chips">
+              <li v-for="c in item.relevant_coursework" :key="c" class="chip">
+                {{ c }}
+              </li>
+            </ul>
+          </div>
+        </article>
+      </ComicPanel>
 
-      <details class="acc">
-        <summary><span>Where I've worked</span></summary>
-        <div class="acc-body">
-          <article
-            v-for="role in work"
-            :key="role.companyTitle + role.workDateRange"
-            class="entry"
+      <ComicPanel class="section full" :rotate="-0.2" size="md">
+        <h2 class="section-title">What I'm into</h2>
+        <h3 class="sub">Interests</h3>
+        <ul class="chips">
+          <li v-for="i in about.interests" :key="i" class="chip">{{ i }}</li>
+        </ul>
+        <h3 class="sub">Goals</h3>
+        <ul class="chips">
+          <li v-for="g in about.goals" :key="g" class="chip">{{ g }}</li>
+        </ul>
+      </ComicPanel>
+
+      <ComicPanel class="section full" :rotate="0.3" size="md">
+        <h2 class="section-title">Where I've worked</h2>
+        <article
+          v-for="role in work"
+          :key="role.companyTitle + role.workDateRange"
+          class="entry"
+        >
+          <header class="entry-head">
+            <h3 class="entry-title">{{ role.companyTitle }}</h3>
+            <p class="entry-meta">
+              <span>{{ role.jobTitle }}</span>
+              <span aria-hidden="true">·</span>
+              <span>{{ role.workDateRange }}</span>
+              <span aria-hidden="true">·</span>
+              <span>{{ role.jobLocation }}</span>
+            </p>
+          </header>
+          <div
+            v-for="section in role.sections"
+            :key="section.label"
+            class="entry-section"
           >
-            <header class="entry-head">
-              <h3 class="entry-title">{{ role.companyTitle }}</h3>
-              <p class="entry-meta">
-                <span>{{ role.jobTitle }}</span>
-                <span aria-hidden="true">·</span>
-                <span>{{ role.workDateRange }}</span>
-                <span aria-hidden="true">·</span>
-                <span>{{ role.jobLocation }}</span>
-              </p>
-            </header>
-            <div
-              v-for="section in role.sections"
-              :key="section.label"
-              class="entry-section"
-            >
-              <h4 class="entry-section-label">{{ section.label }}</h4>
-              <ul v-if="section.label === 'Key Technologies'" class="chips">
-                <li v-for="v in section.values" :key="v" class="chip">{{ v }}</li>
-              </ul>
-              <ul v-else class="bullets">
-                <li v-for="v in section.values" :key="v">{{ v }}</li>
-              </ul>
-            </div>
-          </article>
-        </div>
-      </details>
-
-      <details class="acc">
-        <summary><span>Where I studied</span></summary>
-        <div class="acc-body">
-          <article
-            v-for="item in education.items"
-            :key="item.name + item.graduation_date"
-            class="entry"
-          >
-            <header class="entry-head">
-              <h3 class="entry-title">{{ item.degree_title }}</h3>
-              <p class="entry-meta">
-                <span>{{ item.name }}</span>
-                <span aria-hidden="true">·</span>
-                <span>{{ item.graduation_date }}</span>
-              </p>
-            </header>
-            <div class="entry-section">
-              <h4 class="entry-section-label">Relevant coursework</h4>
-              <ul class="chips">
-                <li v-for="c in item.relevant_coursework" :key="c" class="chip">
-                  {{ c }}
-                </li>
-              </ul>
-            </div>
-          </article>
-        </div>
-      </details>
-    </ComicPanel>
+            <h4 class="entry-section-label">{{ section.label }}</h4>
+            <ul v-if="section.label === 'Key Technologies'" class="chips">
+              <li v-for="v in section.values" :key="v" class="chip">{{ v }}</li>
+            </ul>
+            <ul v-else class="bullets">
+              <li v-for="v in section.values" :key="v">{{ v }}</li>
+            </ul>
+          </div>
+        </article>
+      </ComicPanel>
+    </div>
   </IndexLayout>
 </template>
 
@@ -137,75 +129,50 @@
     height: auto;
   }
 
-  .content {
-    gap: 0.5rem;
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
   }
 
-  /* Accordion sections — native <details>. */
-  .acc {
-    border-top: 3px solid var(--color-ink);
+  .full {
+    grid-column: 1 / -1;
   }
 
-  .acc summary {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 0.1rem;
+  @media (max-width: 50rem) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .section {
+    gap: 0.75rem;
+  }
+
+  .section-title {
+    margin: 0;
     font-family: var(--font-display), cursive;
     font-size: 1.5rem;
     letter-spacing: 0.02em;
-    list-style: none;
-    cursor: pointer;
-    color: var(--color-ink);
-    transition: color var(--duration-quick) var(--ease-snap);
-  }
-
-  .acc summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .acc summary::after {
-    content: '+';
-    margin-left: auto;
-    font-size: 1.6rem;
-    line-height: 1;
-    color: var(--color-signature);
-  }
-
-  .acc[open] summary::after {
-    content: '−';
-  }
-
-  .acc summary:hover {
-    color: var(--color-signature);
-  }
-
-  .acc summary:focus-visible {
-    outline: 3px solid var(--color-signature);
-    outline-offset: 4px;
-  }
-
-  .acc-body {
-    padding: 0.25rem 0 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
   }
 
   .prose {
     margin: 0;
     font-size: 1rem;
     line-height: 1.7;
-    max-width: 60ch;
   }
 
   .sub {
-    margin: 0;
+    margin: 0.25rem 0 0;
     font-family: var(--font-display), cursive;
     font-size: 0.95rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-muted);
+  }
+
+  .sub:first-of-type {
+    margin-top: 0;
   }
 
   .chips {

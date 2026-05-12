@@ -2,6 +2,10 @@
   import { useRouteMeta } from '../composables/useRouteMeta'
   import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
+  import usesData from '../data/uses.json'
+  import type { UsesData } from '../data/types'
+
+  const uses = usesData as UsesData
 
   useRouteMeta({
     title: 'Uses',
@@ -11,17 +15,42 @@
 
 <template>
   <IndexLayout title="Uses" :rotate-title="-0.4">
-    <ComicPanel :rotate="0.3" size="md">
-      <p class="lead">Sorting through the rig.</p>
+    <ComicPanel
+      v-for="(s, i) in uses.sections"
+      :key="s.label"
+      :tone="i % 2 === 0 ? 'paper' : 'ink'"
+      :rotate="i % 2 === 0 ? -0.4 : 0.4"
+      size="md"
+      class="section"
+    >
+      <h2 class="section-label">{{ s.label }}</h2>
+      <ul class="chips">
+        <li v-for="item in s.items" :key="item" class="chip">{{ item }}</li>
+      </ul>
     </ComicPanel>
   </IndexLayout>
 </template>
 
 <style scoped>
-  .lead {
+  .section {
+    gap: 0.6rem;
+  }
+
+  .section-label {
     margin: 0;
-    color: var(--color-muted);
-    font-family: var(--font-mono), monospace;
-    font-size: 0.95rem;
+    font-family: var(--font-display), cursive;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, currentColor 65%, transparent);
+  }
+
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
   }
 </style>

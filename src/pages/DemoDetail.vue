@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
   import { useRouteMeta } from '../composables/useRouteMeta'
+  import { useProseLinks } from '../composables/useProseLinks'
   import ComicPanel from '../components/ComicPanel.vue'
   import { getDemo } from '../content'
   import { formatDate } from '../utils/formatDate'
@@ -12,6 +13,9 @@
   const bodyHtml = computed(() =>
     demo.value?.body ? renderMarkdown(demo.value.body) : '',
   )
+
+  const proseEl = ref<HTMLElement | null>(null)
+  useProseLinks(proseEl)
 
   useRouteMeta({
     title: () => demo.value?.title ?? 'Demo not found',
@@ -60,7 +64,7 @@
           </a>
         </div>
 
-        <div v-if="bodyHtml" class="prose" v-html="bodyHtml" />
+        <div v-if="bodyHtml" ref="proseEl" class="prose" v-html="bodyHtml" />
 
         <ul v-if="demo.tags?.length" class="tags">
           <li v-for="t in demo.tags" :key="t" class="chip">{{ t }}</li>
