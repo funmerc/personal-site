@@ -12,7 +12,8 @@
     "tags": ["portfolio", "design-system"],
     "body": "This is my site, I built it because I wanted somewhere public to put the work I actually do. Projects, demos, notes, that kind of thing. The typical resume portfolio template never really fit the way I think about what I'm building, so I just made my own.\n\nIt's Vue 3 with Tailwind 4, using the new `@theme` directive so there's no config file. Vite for the build, a lightweight Vue Router setup, and no CMS. List content lives in typed JSON files under `src/content/` and the singleton stuff, about me, education, work history, lives separately in `src/data/`. Detail pages render markdown through marked.\n\nThe comic theme isn't just for looks either. Every panel sits at a slight angle, every hover lifts it up like you're peeling back to \"the next page\" underneath. It's a work in progress by design, the site is the playground, I'm figuring out the design as I go.",
     "links": {
-      "live": "https://jasonrice.me"
+      "live": "https://jasonrice.me",
+      "repo": "https://github.com/funmerc/personal-site"
     }
   }
 ]

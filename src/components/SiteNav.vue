@@ -88,6 +88,11 @@
     transform: rotate(-1.5deg) translate(-2px, -2px);
   }
 
+  .wordmark:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
+  }
+
   /* Hamburger: parallelogram tile with three skewed ink bars.
      Hidden by default — only appears at <50rem. */
   .hamburger {
@@ -107,6 +112,11 @@
 
   .hamburger:hover {
     transform: skew(-12deg) rotate(-0.5deg) translate(-2px, -2px);
+  }
+
+  .hamburger:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
   }
 
   /* Counter-skew the icon contents so the bars themselves stay axis-aligned */
@@ -183,6 +193,11 @@
   }
   .menu li:nth-child(even) .link:hover {
     transform: skew(-12deg) rotate(0.5deg) translate(-2px, -2px);
+  }
+
+  .link:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
   }
 
   .link.router-link-active {

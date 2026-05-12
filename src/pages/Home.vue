@@ -255,6 +255,12 @@
     transform: skew(-12deg) rotate(0.5deg) translate(-3px, -3px);
   }
 
+  .cta-primary:focus-visible,
+  .cta-secondary:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
+  }
+
   @media (max-width: 50rem) {
     .grid {
       grid-template-columns: 1fr;

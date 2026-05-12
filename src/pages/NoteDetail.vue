@@ -95,6 +95,11 @@
     color: var(--color-signature);
   }
 
+  .inline-back:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
+  }
+
   .head {
     display: flex;
     flex-direction: column;

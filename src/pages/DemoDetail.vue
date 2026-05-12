@@ -180,6 +180,12 @@
     color: var(--color-ink);
   }
 
+  .ext:focus-visible,
+  .inline-back:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
+  }
+
   .lead {
     margin: 0;
     color: var(--color-muted);
