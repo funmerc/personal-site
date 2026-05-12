@@ -2,6 +2,8 @@
   import { computed } from 'vue'
   import { useTheme } from '../composables/useTheme'
   import ComicPanel from '../components/ComicPanel.vue'
+  import EntryCard from '../components/EntryCard.vue'
+  import { getFeaturedProjects } from '../content'
   import comicHero from '../assets/comic-hero.avif'
   import comicHeroNight from '../assets/comic-hero-night.avif'
 
@@ -9,51 +11,115 @@
   const heroSrc = computed(() =>
     effective.value === 'dark' ? comicHeroNight : comicHero,
   )
+  const featured = getFeaturedProjects()
 </script>
 
 <template>
-  <section class="hero">
-    <div class="grid">
-      <ComicPanel class="cell cell-intro" :rotate="-0.8" size="lg">
-        <p class="kicker">
-          <span class="kicker-tag">Build happiness</span>
-        </p>
-        <h1 class="name">Jason Rice</h1>
-        <p class="tagline">Building products that people enjoy using.</p>
-      </ComicPanel>
+  <div class="home">
+    <section class="hero">
+      <div class="grid">
+        <ComicPanel class="cell cell-intro" :rotate="-0.8" size="lg">
+          <p class="kicker">
+            <span class="kicker-tag">Build happiness</span>
+          </p>
+          <h1 class="name">Jason Rice</h1>
+          <p class="tagline">Building products that people enjoy using.</p>
+        </ComicPanel>
 
-      <ComicPanel class="cell cell-art" :rotate="0.8" size="sm">
-        <img
-          :key="effective"
-          :src="heroSrc"
-          alt="Comic-style illustration of Jason"
-          width="896"
-          height="1195"
-        />
-      </ComicPanel>
+        <ComicPanel class="cell cell-art" :rotate="0.8" size="sm">
+          <img
+            :key="effective"
+            :src="heroSrc"
+            alt="Comic-style illustration of Jason"
+            width="896"
+            height="1195"
+          />
+        </ComicPanel>
 
-      <!-- Placeholder until a data layer lands — keep this short and current. -->
-      <ComicPanel class="cell cell-current" tone="ink" :rotate="-0.4" size="md">
-        <p class="currently">
-          <span class="currently-label">Currently</span>
-          <span>building this site &amp; what comes next.</span>
-        </p>
-        <div class="cta">
-          <RouterLink to="/projects" class="cta-primary">
-            <span>See projects</span>
-          </RouterLink>
-          <RouterLink to="/about" class="cta-secondary">
-            <span>About me</span>
-          </RouterLink>
-        </div>
-      </ComicPanel>
-    </div>
-  </section>
+        <ComicPanel class="cell cell-current" tone="ink" :rotate="-0.4" size="md">
+          <p class="currently">
+            <span class="currently-label">Currently</span>
+            <span>building this site &amp; what comes next.</span>
+          </p>
+          <div class="cta">
+            <RouterLink to="/projects" class="cta-primary">
+              <span>See projects</span>
+            </RouterLink>
+            <RouterLink to="/about" class="cta-secondary">
+              <span>About me</span>
+            </RouterLink>
+          </div>
+        </ComicPanel>
+      </div>
+    </section>
+
+    <section v-if="featured.length" class="featured">
+      <h2 class="section-title">Featured</h2>
+      <div class="featured-list">
+        <EntryCard
+          v-for="p in featured"
+          :key="p.slug"
+          :to="`/projects/${p.slug}`"
+          :title="p.title"
+          :summary="p.summary"
+          :date="p.date"
+        >
+          <ul v-if="p.tech.length" class="chips">
+            <li v-for="t in p.tech" :key="t" class="chip">{{ t }}</li>
+          </ul>
+        </EntryCard>
+      </div>
+    </section>
+  </div>
 </template>
 
 <style scoped>
   .hero {
-    padding: 1rem 0.5rem 2rem;
+    padding: 1rem 0.5rem 1.5rem;
+  }
+
+  .featured {
+    padding: 0.5rem 0.5rem 2rem;
+  }
+
+  .section-title {
+    display: inline-block;
+    position: relative;
+    font-family: var(--font-display), cursive;
+    font-size: 2rem;
+    letter-spacing: 0.02em;
+    margin: 0 0 1rem;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.15em;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--color-signature);
+  }
+
+  .featured-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  @media (min-width: 50rem) {
+    .featured-list {
+      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
   }
 
   .grid {
@@ -159,10 +225,7 @@
     font-size: 1.2rem;
     letter-spacing: 0.04em;
     text-decoration: none;
-    transition:
-      transform var(--duration-quick) var(--ease-snap),
-      background var(--duration-quick) var(--ease-snap),
-      color var(--duration-quick) var(--ease-snap);
+    transition: transform var(--duration-quick) var(--ease-snap);
     will-change: transform;
   }
 
@@ -189,9 +252,13 @@
   }
 
   .cta-secondary:hover {
-    background: var(--color-ink);
-    color: var(--color-paper);
     transform: skew(-12deg) rotate(0.5deg) translate(-3px, -3px);
+  }
+
+  .cta-primary:focus-visible,
+  .cta-secondary:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
   }
 
   @media (max-width: 50rem) {

@@ -78,6 +78,14 @@ v-else
         <a href="https://github.com/funmerc" rel="noopener" target="_blank" class="link">
           <span>GitHub</span>
         </a>
+        <a
+          href="https://www.linkedin.com/in/jason-a-rice"
+          rel="noopener"
+          target="_blank"
+          class="link"
+        >
+          <span>LinkedIn</span>
+        </a>
       </div>
     </div>
   </footer>
@@ -143,5 +151,11 @@ v-else
   .toggle:hover,
   .link:hover {
     transform: skew(-12deg) rotate(-0.5deg) translate(-2px, -2px);
+  }
+
+  .toggle:focus-visible,
+  .link:focus-visible {
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
   }
 </style>

@@ -43,7 +43,9 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    transform: rotate(var(--panel-rotate, 0deg));
+    transform: rotate(var(--panel-rotate, 0deg)) translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
     transition: transform var(--duration-quick) var(--ease-snap);
   }
 
