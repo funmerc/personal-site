@@ -52,6 +52,13 @@
    BASE STYLES
    ============================================================ */
 @layer base {
+  html {
+    /* Reserve space for the scrollbar gutter even on short pages so
+       navigating between scrollable and non-scrollable routes doesn't
+       cause the page to jump horizontally. */
+    scrollbar-gutter: stable;
+  }
+
   body {
     font-family: var(--font-sans), sans-serif;
     background: var(--color-bg);
@@ -113,6 +120,11 @@
     line-height: 1;
   }
 
+  /* Reset the user-agent rule that shrinks <h1> inside <section>/<article>/<nav>. */
+  h1 {
+    font-size: 2.5rem;
+  }
+
   code, pre {
     font-family: var(--font-mono), monospace;
   }
@@ -155,6 +167,119 @@
   text-shadow: 3px 3px 0 var(--color-ink);
   display: inline-block;
   transform: rotate(var(--action-rotate, -4deg));
+}
+
+/* Outlined pill — used for tags, interests, tech, coursework. */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  background: var(--color-paper);
+  border: 2px solid var(--color-ink);
+  color: var(--color-ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   PROSE
+   Applied to a wrapper around markdown-rendered HTML (or any
+   long-form text block). v-html-injected content is outside the
+   scoped-CSS reach of individual components, so these styles live
+   here and cascade in.
+   ============================================================ */
+.prose {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 65ch;
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+.prose p {
+  margin: 0 0 1rem;
+}
+
+.prose a {
+  color: var(--color-signature);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.prose code {
+  font-family: var(--font-mono), monospace;
+  background: var(--color-bg);
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--color-halftone);
+  font-size: 0.9em;
+}
+
+.prose pre {
+  background: var(--color-bg);
+  border: 2px solid var(--color-ink);
+  padding: 1rem;
+  margin: 0 0 1rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose strong {
+  font-weight: 700;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose ul, .prose ol {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.25rem;
+}
+
+.prose h2 {
+  font-family: var(--font-display), cursive;
+  font-size: 1.5rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.prose h3 {
+  font-family: var(--font-display), cursive;
+  font-size: 1.25rem;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-ink);
+  padding-left: 1rem;
+  margin: 0 0 1rem;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 2px dashed var(--color-halftone);
+  margin: 1.5rem 0;
 }
 
 /* ============================================================

@@ -1,6 +1,10 @@
 <script setup lang="ts">
   import { useRouteMeta } from '../composables/useRouteMeta'
-  import ComicPanel from '../components/ComicPanel.vue'
+  import IndexLayout from '../components/IndexLayout.vue'
+  import EntryCard from '../components/EntryCard.vue'
+  import { getProjects } from '../content'
+
+  const projects = getProjects()
 
   useRouteMeta({
     title: 'Projects',
@@ -9,28 +13,39 @@
 </script>
 
 <template>
-  <section class="page">
-    <ComicPanel class="page-frame" :rotate="-0.5" size="lg">
-      <h1>Projects</h1>
-      <p class="lead">First entries are being written up.</p>
-    </ComicPanel>
-  </section>
+  <IndexLayout title="Projects" :rotate-title="-0.5">
+    <p v-if="!projects.length" class="lead">First entries are being written up.</p>
+    <EntryCard
+      v-for="(p, i) in projects"
+      :key="p.slug"
+      :to="`/projects/${p.slug}`"
+      :title="p.title"
+      :summary="p.summary"
+      :date="p.date"
+      :tone="i % 2 === 0 ? 'paper' : 'ink'"
+      :rotate="i % 2 === 0 ? -0.4 : 0.4"
+    >
+      <ul v-if="p.tech.length" class="chips">
+        <li v-for="t in p.tech" :key="t" class="chip">{{ t }}</li>
+      </ul>
+    </EntryCard>
+  </IndexLayout>
 </template>
 
 <style scoped>
-  .page {
-    padding: 1.5rem 0.5rem 2rem;
-  }
-
-  .page-frame {
-    max-width: 42rem;
-    gap: 0.85rem;
-  }
-
   .lead {
     margin: 0;
     color: var(--color-muted);
     font-family: var(--font-mono), monospace;
     font-size: 0.95rem;
+  }
+
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
   }
 </style>

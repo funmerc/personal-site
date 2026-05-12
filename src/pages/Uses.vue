@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { useRouteMeta } from '../composables/useRouteMeta'
+  import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
 
   useRouteMeta({
@@ -9,24 +10,14 @@
 </script>
 
 <template>
-  <section class="page">
-    <ComicPanel class="page-frame" :rotate="-0.4" size="lg">
-      <h1>Uses</h1>
+  <IndexLayout title="Uses" :rotate-title="-0.4">
+    <ComicPanel :rotate="0.3" size="md">
       <p class="lead">Sorting through the rig.</p>
     </ComicPanel>
-  </section>
+  </IndexLayout>
 </template>
 
 <style scoped>
-  .page {
-    padding: 1.5rem 0.5rem 2rem;
-  }
-
-  .page-frame {
-    max-width: 42rem;
-    gap: 0.85rem;
-  }
-
   .lead {
     margin: 0;
     color: var(--color-muted);
