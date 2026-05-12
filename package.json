@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "vue-tsc -b && vite build && node scripts/ops.js postbuild",
     "dev": "vite",
@@ -10,11 +13,14 @@
     "format:check": "prettier --check .",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@unhead/vue": "^3.1.0",
     "marked": "^18.0.3",
+    "shiki": "^4.0.2",
     "vue": "^3.5.32",
     "vue-router": "^4.6.4"
   },
@@ -24,14 +30,19 @@
     "@types/node": "^24.12.2",
     "@vitejs/plugin-vue": "^6.0.6",
     "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/test-utils": "^2.4.10",
     "@vue/tsconfig": "^0.9.1",
     "eslint": "^10.3.0",
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
+    "jsdom": "^29.1.1",
     "prettier": "^3.8.3",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.2.4",
     "typescript": "~6.0.2",
     "vite": "^8.0.10",
+    "vite-imagetools": "^10.0.0",
+    "vitest": "^4.1.6",
     "vue-tsc": "^3.2.7"
   }
 }

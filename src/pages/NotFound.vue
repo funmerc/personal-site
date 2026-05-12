@@ -1,24 +1,38 @@
 <script setup lang="ts">
+  import { onMounted, ref } from 'vue'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import ComicPanel from '../components/ComicPanel.vue'
+  import Loader from '../components/Loader.vue'
 
   useRouteMeta({
     title: 'Not found',
     description: "That page doesn't exist.",
     noindex: true,
   })
+
+  const loaded = ref(false)
+  onMounted(() => {
+    requestAnimationFrame(() => {
+      loaded.value = true
+    })
+  })
 </script>
 
 <template>
   <section class="page">
-    <ComicPanel class="page-frame" :rotate="-1.5" size="lg">
-      <p class="bang"><span class="action-text">404!</span></p>
-      <h1>Off-panel</h1>
-      <p class="lead">This page doesn't exist — probably never did.</p>
-      <RouterLink to="/" class="home-cta">
-        <span>← Back to start</span>
-      </RouterLink>
-    </ComicPanel>
+    <div class="fade-content" :class="{ 'is-loading': !loaded }">
+      <ComicPanel class="page-frame" :rotate="-1.5" size="lg">
+        <p class="bang"><span class="action-text">404!</span></p>
+        <h1>Off-panel</h1>
+        <p class="lead">This page doesn't exist — probably never did.</p>
+        <RouterLink to="/" class="home-cta">
+          <span>← Back to start</span>
+        </RouterLink>
+      </ComicPanel>
+    </div>
+    <Transition name="loader-fade">
+      <Loader v-if="!loaded" />
+    </Transition>
   </section>
 </template>
 
@@ -76,5 +90,13 @@
   .home-cta:focus-visible {
     outline: 3px solid var(--color-ink);
     outline-offset: 4px;
+  }
+
+  .loader-fade-leave-active {
+    transition: opacity 250ms ease-out;
+  }
+
+  .loader-fade-leave-to {
+    opacity: 0;
   }
 </style>

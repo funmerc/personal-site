@@ -36,3 +36,9 @@ export interface UsesSection {
 export interface UsesData {
   sections: UsesSection[]
 }
+
+export interface StatusData {
+  currently: string
+  next: string
+  future: string
+}

@@ -13,7 +13,7 @@
   const defaultTitle = 'Jason Rice — Software engineer'
   const defaultDescription =
     'Software engineer working in public — projects, demos, and notes.'
-  const ogImage = `${origin}/og.png`
+  const ogImage = `${origin}/og.jpg`
 
   const canonical = computed(() => `${origin}${route.path}`)
 
@@ -43,8 +43,9 @@
 
 <template>
   <div class="layout" :style="{ '--slide-direction': slideDirection }">
+    <a class="skip-link" href="#main">Skip to content</a>
     <SiteNav />
-    <main>
+    <main id="main" tabindex="-1">
       <RouterView v-slot="{ Component }">
         <Transition name="page-slide" mode="out-in">
           <component :is="Component" />
@@ -71,5 +72,33 @@
     width: 100%;
     margin: 0 auto;
     padding: 2rem 1rem;
+  }
+
+  main:focus {
+    outline: none;
+  }
+
+  /* Skip-to-content link. Off-screen until focused via keyboard, then
+     snaps into the top-left as a comic-style tab. */
+  .skip-link {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border: 3px solid var(--color-ink);
+    padding: 0.5rem 0.9rem;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transform: translateY(calc(-100% - 1.5rem));
+    transition: transform var(--duration-quick) var(--ease-snap);
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0) rotate(-1deg);
+    outline: 3px solid var(--color-signature);
+    outline-offset: 4px;
   }
 </style>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { onMounted, ref } from 'vue'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import IndexLayout from '../components/IndexLayout.vue'
   import EntryCard from '../components/EntryCard.vue'
@@ -10,10 +11,17 @@
     title: 'Notes',
     description: 'Writing on engineering and building.',
   })
+
+  const loaded = ref(false)
+  onMounted(() => {
+    requestAnimationFrame(() => {
+      loaded.value = true
+    })
+  })
 </script>
 
 <template>
-  <IndexLayout title="Notes" :rotate-title="-0.8">
+  <IndexLayout title="Notes" :rotate-title="-0.8" :loading="!loaded">
     <p v-if="!notes.length" class="lead">First posts are being drafted.</p>
     <EntryCard
       v-for="(n, i) in notes"
@@ -27,12 +35,3 @@
     />
   </IndexLayout>
 </template>
-
-<style scoped>
-  .lead {
-    margin: 0;
-    color: var(--color-muted);
-    font-family: var(--font-mono), monospace;
-    font-size: 0.95rem;
-  }
-</style>

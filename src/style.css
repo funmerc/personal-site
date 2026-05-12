@@ -282,6 +282,179 @@
   margin: 1.5rem 0;
 }
 
+/* Shiki fenced-code blocks. Output is generated with defaultColor: false,
+   so each token carries both --shiki-light and --shiki-dark CSS variables.
+   We pick one based on the active theme — same activation paths as the
+   site tokens above. */
+.prose .shiki {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+.prose .shiki span {
+  color: var(--shiki-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .prose .shiki,
+  :root:not([data-theme='light']) .prose .shiki span {
+    color: var(--shiki-dark);
+  }
+
+  :root:not([data-theme='light']) .prose .shiki {
+    background-color: var(--shiki-dark-bg);
+  }
+}
+
+:root[data-theme='dark'] .prose .shiki,
+:root[data-theme='dark'] .prose .shiki span {
+  color: var(--shiki-dark);
+}
+
+:root[data-theme='dark'] .prose .shiki {
+  background-color: var(--shiki-dark-bg);
+}
+
+/* ============================================================
+   PAGE PRIMITIVES
+   Shared building blocks for index and detail routes. Each page
+   was duplicating these scoped — they're textually identical, so
+   they live here instead of in every page's <style scoped>.
+   ============================================================ */
+
+.page {
+  position: relative;
+  padding: 1.5rem 0.5rem 2rem;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+/* Page-content wrapper that crossfades with the Loader. Pages set
+   `is-loading` while their critical assets/data resolve. */
+.fade-content {
+  transition: opacity 350ms ease-out;
+}
+
+.fade-content.is-loading {
+  opacity: 0;
+}
+
+.page-frame {
+  gap: 1.25rem;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.95rem;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  color: var(--color-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+}
+
+.summary {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.chips,
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.back-tab {
+  display: inline-block;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border: 3px solid var(--color-ink);
+  box-shadow: 4px 4px 0 var(--color-ink);
+  padding: 0.4rem 0.85rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transform: rotate(-1.5deg) translateZ(0);
+  backface-visibility: hidden;
+  transition:
+    transform var(--duration-quick) var(--ease-snap),
+    color var(--duration-quick) var(--ease-snap);
+  will-change: transform;
+}
+
+.back-tab:hover {
+  transform: rotate(-1.5deg) translateZ(0) translate(-2px, -2px);
+  color: var(--color-signature);
+}
+
+.back-tab:focus-visible {
+  outline: 3px solid var(--color-signature);
+  outline-offset: 4px;
+}
+
+.inline-back {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.inline-back:hover {
+  color: var(--color-signature);
+}
+
+.inline-back:focus-visible {
+  outline: 3px solid var(--color-signature);
+  outline-offset: 4px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ext {
+  display: inline-block;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border: 2px solid var(--color-ink);
+  padding: 0.35rem 0.7rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: transform var(--duration-quick) var(--ease-snap);
+  will-change: transform;
+}
+
+.ext:hover {
+  transform: translate(-2px, -2px);
+  background: var(--color-signature);
+  color: var(--color-ink);
+}
+
+.ext:focus-visible {
+  outline: 3px solid var(--color-signature);
+  outline-offset: 4px;
+}
+
 /* ============================================================
    INTERACTIONS
    ============================================================ */

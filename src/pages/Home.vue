@@ -1,21 +1,48 @@
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useTheme } from '../composables/useTheme'
   import ComicPanel from '../components/ComicPanel.vue'
   import EntryCard from '../components/EntryCard.vue'
-  import { getFeaturedProjects } from '../content'
-  import comicHero from '../assets/comic-hero.avif'
-  import comicHeroNight from '../assets/comic-hero-night.avif'
+  import ResponsiveImage from '../components/ResponsiveImage.vue'
+  import Loader from '../components/Loader.vue'
+  import { getRecent } from '../content'
+  import statusData from '../data/status.json'
+  import type { StatusData } from '../data/types'
+  import comicHero from '../assets/comic-hero.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
+  import comicHeroNight from '../assets/comic-hero-night.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
 
   const { effective } = useTheme()
-  const heroSrc = computed(() =>
+  const heroPicture = computed(() =>
     effective.value === 'dark' ? comicHeroNight : comicHero,
   )
-  const featured = getFeaturedProjects()
+  const recent = getRecent(2)
+
+  const status = statusData as StatusData
+  const statusRows: Array<{ label: string; text: string }> = [
+    { label: 'Currently', text: status.currently },
+    { label: 'Next', text: status.next },
+    { label: 'Future', text: status.future },
+  ]
+
+  const loaded = ref(false)
+  function onHeroLoad() {
+    loaded.value = true
+  }
+  // Fallback in case @load never fires (cached image with sync decode,
+  // or browser that doesn't fire the event). 800ms is past most cold loads.
+  onMounted(() => {
+    setTimeout(() => {
+      loaded.value = true
+    }, 800)
+  })
 </script>
 
 <template>
   <div class="home">
+    <Transition name="loader-fade">
+      <Loader v-if="!loaded" />
+    </Transition>
+    <div class="fade-content" :class="{ 'is-loading': !loaded }">
     <section class="hero">
       <div class="grid">
         <ComicPanel class="cell cell-intro" :rotate="-0.8" size="lg">
@@ -27,55 +54,63 @@
         </ComicPanel>
 
         <ComicPanel class="cell cell-art" :rotate="0.8" size="sm">
-          <img
+          <ResponsiveImage
             :key="effective"
-            :src="heroSrc"
+            :picture="heroPicture"
             alt="Comic-style illustration of Jason"
-            width="896"
-            height="1195"
+            sizes="(min-width: 50rem) 45vw, 100vw"
+            eager
+            @load="onHeroLoad"
           />
         </ComicPanel>
 
         <ComicPanel class="cell cell-current" tone="ink" :rotate="-0.4" size="md">
-          <p class="currently">
-            <span class="currently-label">Currently</span>
-            <span>building this site &amp; what comes next.</span>
-          </p>
-          <div class="cta">
-            <RouterLink to="/projects" class="cta-primary">
-              <span>See projects</span>
-            </RouterLink>
-            <RouterLink to="/about" class="cta-secondary">
-              <span>About me</span>
-            </RouterLink>
-          </div>
+          <ul class="status">
+            <li v-for="row in statusRows" :key="row.label" class="status-row">
+              <span class="status-label">{{ row.label }}</span>
+              <span class="status-text">{{ row.text }}</span>
+            </li>
+          </ul>
         </ComicPanel>
       </div>
     </section>
 
-    <section v-if="featured.length" class="featured">
-      <h2 class="section-title">Featured</h2>
+    <section v-if="recent.length" class="featured">
+      <h2 class="section-title">Recent</h2>
       <div class="featured-list">
         <EntryCard
-          v-for="p in featured"
-          :key="p.slug"
-          :to="`/projects/${p.slug}`"
-          :title="p.title"
-          :summary="p.summary"
-          :date="p.date"
+          v-for="item in recent"
+          :key="`${item.kind}/${item.slug}`"
+          :to="`/${item.kind}/${item.slug}`"
+          :title="item.title"
+          :summary="item.summary"
+          :date="item.date"
         >
-          <ul v-if="p.tech.length" class="chips">
-            <li v-for="t in p.tech" :key="t" class="chip">{{ t }}</li>
+          <ul v-if="'tech' in item && item.tech.length" class="chips">
+            <li v-for="t in item.tech" :key="t" class="chip">{{ t }}</li>
           </ul>
         </EntryCard>
       </div>
     </section>
+    </div>
   </div>
 </template>
 
 <style scoped>
+  .home {
+    position: relative;
+  }
+
   .hero {
     padding: 1rem 0.5rem 1.5rem;
+  }
+
+  .loader-fade-leave-active {
+    transition: opacity 250ms ease-out;
+  }
+
+  .loader-fade-leave-to {
+    opacity: 0;
   }
 
   .featured {
@@ -186,19 +221,27 @@
     object-fit: contain;
   }
 
-  /* Inverted (ink-tone) panel: text inherits paper color from the panel.
-     Only the signature label and the cta backgrounds override that. */
-  .currently {
+  /* Status box on the ink-tone panel: rows for Currently / Next / Future,
+     each with a signature-red badge and mono text. */
+  .status {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .status-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: baseline;
     gap: 0.6rem;
     font-family: var(--font-mono), monospace;
     font-size: 0.95rem;
-    margin: 0;
   }
 
-  .currently-label {
+  .status-label {
     display: inline-block;
     background: var(--color-signature);
     color: var(--color-ink);
@@ -208,57 +251,14 @@
     font-size: 0.9rem;
     letter-spacing: 0.05em;
     transform: skew(-12deg) rotate(-1.5deg);
+    /* Keep each label the same width so the text columns line up. */
+    min-width: 5.5rem;
+    text-align: center;
   }
 
-  .cta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.85rem;
-  }
-
-  .cta-primary,
-  .cta-secondary {
-    display: inline-block;
-    border: 3px solid var(--color-ink);
-    padding: 0.7rem 1.4rem;
-    font-family: var(--font-display), cursive;
-    font-size: 1.2rem;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    transition: transform var(--duration-quick) var(--ease-snap);
-    will-change: transform;
-  }
-
-  .cta-primary span,
-  .cta-secondary span {
-    display: inline-block;
-    transform: skew(12deg);
-  }
-
-  .cta-primary {
-    background: var(--color-signature);
-    color: var(--color-ink);
-    transform: skew(-12deg) rotate(-1deg);
-  }
-
-  .cta-primary:hover {
-    transform: skew(-12deg) rotate(-1deg) translate(-3px, -3px);
-  }
-
-  .cta-secondary {
-    background: var(--color-paper);
-    color: var(--color-ink);
-    transform: skew(-12deg) rotate(0.5deg);
-  }
-
-  .cta-secondary:hover {
-    transform: skew(-12deg) rotate(0.5deg) translate(-3px, -3px);
-  }
-
-  .cta-primary:focus-visible,
-  .cta-secondary:focus-visible {
-    outline: 3px solid var(--color-signature);
-    outline-offset: 4px;
+  .status-text {
+    flex: 1;
+    min-width: 0;
   }
 
   @media (max-width: 50rem) {
