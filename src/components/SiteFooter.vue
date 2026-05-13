@@ -92,10 +92,15 @@
 </template>
 
 <style scoped>
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem 1.5rem;
+  }
+
   .panel {
-    position: fixed;
-    bottom: 1.25rem;
-    z-index: 50;
     padding: 0.55rem 0.9rem;
     background: var(--color-paper);
     border: 3px solid var(--color-ink);
@@ -105,12 +110,10 @@
   }
 
   .panel-left {
-    left: 1.25rem;
     transform: rotate(-1.5deg);
   }
 
   .panel-right {
-    right: 1.25rem;
     display: flex;
     align-items: center;
     gap: 0.6rem;
@@ -119,27 +122,8 @@
 
   @media (max-width: 600px) {
     footer {
-      position: fixed;
-      bottom: 1rem;
-      left: 0;
-      right: 0;
-      display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 0.6rem;
-      z-index: 50;
-    }
-
-    .panel {
-      position: static;
-    }
-
-    .panel-left {
-      left: auto;
-    }
-
-    .panel-right {
-      right: auto;
     }
   }
 
