@@ -194,6 +194,9 @@
   font-size: 1rem;
   line-height: 1.7;
   max-width: 65ch;
+  /* Flex item inside ComicPanel — without this, a long <pre> line sets
+     min-content and overflows the panel instead of scrolling inside. */
+  min-width: 0;
 }
 
 .prose > :first-child {
@@ -325,6 +328,13 @@
 .page {
   position: relative;
   padding: 1.5rem 0.5rem 2rem;
+  /* `width: 100%` is what actually constrains us on narrow viewports.
+     Without it, the auto horizontal margins (used to center on wide
+     viewports) skip flex's `align-items: stretch`, so the section sizes
+     to its max-content — which a wide <pre> line in a note pushes
+     beyond the viewport. With `width: 100%`, the preferred cross size
+     is the parent's content area; `max-width` still caps on desktop. */
+  width: 100%;
   max-width: 56rem;
   margin: 0 auto;
 }
