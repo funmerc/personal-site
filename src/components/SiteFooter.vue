@@ -117,6 +117,32 @@
     transform: rotate(1.5deg);
   }
 
+  @media (max-width: 600px) {
+    footer {
+      position: fixed;
+      bottom: 1rem;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 50;
+    }
+
+    .panel {
+      position: static;
+    }
+
+    .panel-left {
+      left: auto;
+    }
+
+    .panel-right {
+      right: auto;
+    }
+  }
+
   .copy {
     margin: 0;
   }
