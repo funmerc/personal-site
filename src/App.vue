@@ -71,7 +71,13 @@
     max-width: 80rem;
     width: 100%;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 6rem;
+  }
+
+  @media (max-width: 600px) {
+    main {
+      padding-bottom: 10rem;
+    }
   }
 
   main:focus {
