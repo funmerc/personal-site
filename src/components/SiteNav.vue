@@ -94,7 +94,7 @@
   }
 
   /* Hamburger: parallelogram tile with three skewed ink bars.
-     Hidden by default — only appears at <50rem. */
+     Hidden by default, only appears below 50rem wide. */
   .hamburger {
     display: none;
     align-items: center;
@@ -206,8 +206,8 @@
   }
 
   /* Backdrop: hidden on desktop, halftone-shaded sheet on mobile.
-     Only the .is-animating class enables the transition — viewport
-     crosses snap, toggles animate. */
+     Only the .is-animating class enables the transition. Viewport
+     crosses snap, user toggles animate. */
   .backdrop {
     display: none;
     position: fixed;

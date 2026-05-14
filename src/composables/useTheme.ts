@@ -18,7 +18,9 @@ function applyToDocument(value: ThemePreference) {
 }
 
 function init() {
-  if (initialized) return
+  if (initialized) {
+    return
+  }
   initialized = true
 
   try {
@@ -27,7 +29,7 @@ function init() {
       preference.value = saved
     }
   } catch {
-    // localStorage unavailable — fall through to system preference
+    // No localStorage available, so just fall back to the system preference.
   }
 
   const media = window.matchMedia('(prefers-color-scheme: dark)')
@@ -41,7 +43,9 @@ export function useTheme() {
   init()
 
   const effective = computed<EffectiveTheme>(() => {
-    if (preference.value) return preference.value
+    if (preference.value) {
+      return preference.value
+    }
     return systemPrefersDark.value ? 'dark' : 'light'
   })
 
@@ -51,7 +55,7 @@ export function useTheme() {
     try {
       localStorage.setItem(STORAGE_KEY, next)
     } catch {
-      // storage unavailable — keep in-memory only
+      // No storage available, so we just keep the choice in memory for this session.
     }
     applyToDocument(next)
   }

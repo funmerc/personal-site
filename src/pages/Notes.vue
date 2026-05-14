@@ -24,14 +24,14 @@
   <IndexLayout title="Notes" :rotate-title="-0.8" :loading="!loaded">
     <p v-if="!notes.length" class="lead">First posts are being drafted.</p>
     <EntryCard
-      v-for="(n, i) in notes"
-      :key="n.slug"
-      :to="`/notes/${n.slug}`"
-      :title="n.title"
-      :summary="n.summary"
-      :date="n.date"
-      :tone="i % 2 === 0 ? 'paper' : 'ink'"
-      :rotate="i % 2 === 0 ? -0.4 : 0.4"
+      v-for="(note, index) in notes"
+      :key="note.slug"
+      :to="`/notes/${note.slug}`"
+      :title="note.title"
+      :summary="note.summary"
+      :date="note.date"
+      :tone="index % 2 === 0 ? 'paper' : 'ink'"
+      :rotate="index % 2 === 0 ? -0.4 : 0.4"
     />
   </IndexLayout>
 </template>

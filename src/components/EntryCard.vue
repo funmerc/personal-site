@@ -20,7 +20,7 @@
 
 <template>
   <RouterLink :to="to" class="entry-link">
-    <ComicPanel :tone="tone" :rotate="rotate" size="md" class="entry-panel">
+    <ComicPanel :tone="tone" :rotate="rotate" size="md">
       <span class="open-indicator" aria-hidden="true">
         <svg
           viewBox="0 0 16 16"

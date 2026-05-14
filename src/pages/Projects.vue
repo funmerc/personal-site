@@ -24,17 +24,17 @@
   <IndexLayout title="Projects" :rotate-title="-0.5" :loading="!loaded">
     <p v-if="!projects.length" class="lead">First entries are being written up.</p>
     <EntryCard
-      v-for="(p, i) in projects"
-      :key="p.slug"
-      :to="`/projects/${p.slug}`"
-      :title="p.title"
-      :summary="p.summary"
-      :date="p.date"
-      :tone="i % 2 === 0 ? 'paper' : 'ink'"
-      :rotate="i % 2 === 0 ? -0.4 : 0.4"
+      v-for="(project, index) in projects"
+      :key="project.slug"
+      :to="`/projects/${project.slug}`"
+      :title="project.title"
+      :summary="project.summary"
+      :date="project.date"
+      :tone="index % 2 === 0 ? 'paper' : 'ink'"
+      :rotate="index % 2 === 0 ? -0.4 : 0.4"
     >
-      <ul v-if="p.tech.length" class="chips">
-        <li v-for="t in p.tech" :key="t" class="chip">{{ t }}</li>
+      <ul v-if="project.tech.length" class="chips">
+        <li v-for="tech in project.tech" :key="tech" class="chip">{{ tech }}</li>
       </ul>
     </EntryCard>
   </IndexLayout>

@@ -11,17 +11,29 @@ export function useProseLinks(elRef: Ref<HTMLElement | null>) {
   const router = useRouter()
 
   function onClick(event: MouseEvent) {
-    if (event.defaultPrevented) return
-    if (event.button !== 0) return
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    if (event.defaultPrevented) {
+      return
+    }
+    if (event.button !== 0) {
+      return
+    }
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return
+    }
 
     const target = event.target as HTMLElement | null
     const anchor = target?.closest('a') as HTMLAnchorElement | null
-    if (!anchor) return
+    if (!anchor) {
+      return
+    }
 
     const href = anchor.getAttribute('href')
-    if (!href || !href.startsWith('/')) return
-    if (anchor.target === '_blank') return
+    if (!href || !href.startsWith('/')) {
+      return
+    }
+    if (anchor.target === '_blank') {
+      return
+    }
 
     event.preventDefault()
     router.push(href)
@@ -29,13 +41,15 @@ export function useProseLinks(elRef: Ref<HTMLElement | null>) {
 
   let attached: HTMLElement | null = null
 
-  function attach(el: HTMLElement | null) {
-    if (attached) attached.removeEventListener('click', onClick)
-    attached = el
-    el?.addEventListener('click', onClick)
+  function attach(element: HTMLElement | null) {
+    if (attached) {
+      attached.removeEventListener('click', onClick)
+    }
+    attached = element
+    element?.addEventListener('click', onClick)
   }
 
   onMounted(() => attach(elRef.value))
-  watch(elRef, (el) => attach(el))
+  watch(elRef, (element) => attach(element))
   onBeforeUnmount(() => attach(null))
 }
