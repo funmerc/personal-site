@@ -58,8 +58,17 @@
       :tone="i % 2 === 0 ? 'paper' : 'ink'"
       :rotate="i % 2 === 0 ? -0.4 : 0.4"
     >
-      <ul v-if="d.tech.length" class="chips">
-        <li v-for="t in d.tech" :key="t" class="chip">{{ t }}</li>
+      <ul
+        v-if="d.tech.length || d.tags?.length"
+        class="chips"
+      >
+        <li
+          v-for="t in [...d.tech, ...(d.tags ?? [])]"
+          :key="t"
+          class="chip"
+        >
+          {{ t }}
+        </li>
       </ul>
     </EntryCard>
   </IndexLayout>

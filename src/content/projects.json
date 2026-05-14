@@ -1,5 +1,22 @@
 [
   {
+    "slug": "labs",
+    "title": "Labs",
+    "summary": "A growing playground of small interactive demos I build to learn things in public.",
+    "date": "2026-05-14",
+    "status": "published",
+    "featured": true,
+    "tech": ["TypeScript", "HTML", "CSS", "Vite", "GitHub Pages"],
+    "role": "solo",
+    "period": "2026",
+    "tags": ["demos", "experiments", "learning"],
+    "body": "Labs is where I prototype the stuff I want to actually understand. Each demo is its own little page, focused on one idea, shipped fast and refined later. Some of them show up in the demos section of this site as embeds, others just live in the labs index.\n\nIt's plain HTML and TypeScript, built with Vite and hosted on GitHub Pages. No framework, no app shell, just one page per idea. That constraint is the point. It keeps each demo legible end to end, and it means I can fork one, change one variable, and learn something without fighting the tooling.\n\nIf a demo gets enough legs to feel like a real project, it graduates out of labs into its own thing. Most won't, and that's fine. Labs is the workshop, not the showroom.",
+    "links": {
+      "live": "https://funmerc.github.io/labs/",
+      "repo": "https://github.com/funmerc/labs"
+    }
+  },
+  {
     "slug": "this-site",
     "title": "This site",
     "summary": "Working-in-public portfolio in Vue 3 + Tailwind 4. Built as its own design playground.",

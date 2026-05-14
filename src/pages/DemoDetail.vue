@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, ref, watchEffect } from 'vue'
+  import { computed, ref, watch, watchEffect } from 'vue'
   import { useRoute } from 'vue-router'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import { useProseLinks } from '../composables/useProseLinks'
+  import { useTheme } from '../composables/useTheme'
   import ComicPanel from '../components/ComicPanel.vue'
   import Loader from '../components/Loader.vue'
   import { getDemo } from '../content'
@@ -26,6 +27,63 @@
 
   const proseEl = ref<HTMLElement | null>(null)
   useProseLinks(proseEl)
+
+  const LABS_PROD_ORIGIN = 'https://funmerc.github.io/labs'
+  const LABS_DEV_ORIGIN = 'http://localhost:5174'
+
+  const embedFrame = ref<HTMLIFrameElement | null>(null)
+  const { effective } = useTheme()
+
+  const embedSrc = computed(() => {
+    const src = demo.value?.embed
+    if (!src) return ''
+    if (import.meta.env.DEV && src.startsWith(LABS_PROD_ORIGIN)) {
+      return LABS_DEV_ORIGIN + src.slice(LABS_PROD_ORIGIN.length)
+    }
+    return src
+  })
+
+  // Probe local labs server in dev so we can show a friendly placeholder
+  // instead of the browser's "can't reach this site" page inside the iframe.
+  type EmbedProbe = 'pending' | 'ok' | 'failed'
+  const embedProbe = ref<EmbedProbe>('ok')
+
+  watchEffect(async () => {
+    const src = embedSrc.value
+    if (!src) {
+      embedProbe.value = 'ok'
+      return
+    }
+    if (!import.meta.env.DEV || !src.startsWith(LABS_DEV_ORIGIN)) {
+      embedProbe.value = 'ok'
+      return
+    }
+    embedProbe.value = 'pending'
+    try {
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), 1500)
+      await fetch(src, { mode: 'no-cors', signal: controller.signal })
+      clearTimeout(timer)
+      embedProbe.value = 'ok'
+    } catch {
+      embedProbe.value = 'failed'
+    }
+  })
+
+  function postTheme() {
+    embedFrame.value?.contentWindow?.postMessage(
+      { theme: effective.value },
+      '*',
+    )
+  }
+
+  function onEmbedLoad() {
+    postTheme()
+  }
+
+  watch(effective, () => {
+    postTheme()
+  })
 
   useRouteMeta({
     title: () => demo.value?.title ?? 'Demo not found',
@@ -77,6 +135,27 @@
 
         <div v-if="bodyHtml" ref="proseEl" class="prose" v-html="bodyHtml" />
 
+        <div v-if="embedSrc" class="embed">
+          <iframe
+            v-if="embedProbe === 'ok'"
+            ref="embedFrame"
+            :src="embedSrc"
+            :title="`${demo.title} — live demo`"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            @load="onEmbedLoad"
+          />
+          <div v-else-if="embedProbe === 'failed'" class="embed-placeholder">
+            <p class="embed-placeholder__title">Local labs server isn't running.</p>
+            <p class="embed-placeholder__hint">
+              Start it so it serves <code>{{ embedSrc }}</code>.
+            </p>
+          </div>
+          <div v-else class="embed-placeholder embed-placeholder--probing">
+            <p>Connecting to local labs…</p>
+          </div>
+        </div>
+
         <ul v-if="demo.tags?.length" class="tags">
           <li v-for="t in demo.tags" :key="t" class="chip">{{ t }}</li>
         </ul>
@@ -103,6 +182,48 @@
 
   .loader-fade-leave-to {
     opacity: 0;
+  }
+
+  .embed {
+    margin-top: 1.5rem;
+    border: 3px solid var(--color-ink);
+    background: var(--color-paper);
+    overflow: hidden;
+  }
+
+  .embed iframe {
+    display: block;
+    width: 100%;
+    height: min(80vh, 720px);
+    border: 0;
+  }
+
+  .embed-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 12rem;
+    padding: 2rem 1.5rem;
+    font-family: var(--font-mono), monospace;
+    text-align: center;
+  }
+
+  .embed-placeholder__title {
+    font-weight: 700;
+  }
+
+  .embed-placeholder__hint {
+    opacity: 0.8;
+  }
+
+  .embed-placeholder code {
+    word-break: break-all;
+  }
+
+  .embed-placeholder--probing {
+    opacity: 0.6;
   }
 </style>
 
