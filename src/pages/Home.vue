@@ -28,8 +28,9 @@
   function onHeroLoad() {
     loaded.value = true
   }
-  // Fallback in case @load never fires (cached image with sync decode,
-  // or browser that doesn't fire the event). 800ms is past most cold loads.
+  // Safety net for cases where @load never fires, like a cached image with
+  // sync decoding or a browser that skips the event. 800ms is past most
+  // cold loads, so by then we just show the page.
   onMounted(() => {
     setTimeout(() => {
       loaded.value = true
@@ -45,7 +46,7 @@
     <div class="fade-content" :class="{ 'is-loading': !loaded }">
     <section class="hero">
       <div class="grid">
-        <ComicPanel class="cell cell-intro" :rotate="-0.8" size="lg">
+        <ComicPanel class="cell-intro" :rotate="-0.8" size="lg">
           <p class="kicker">
             <span class="kicker-tag">Build happiness</span>
           </p>
@@ -53,7 +54,7 @@
           <p class="tagline">Building products that people enjoy using.</p>
         </ComicPanel>
 
-        <ComicPanel class="cell cell-art" :rotate="0.8" size="sm">
+        <ComicPanel class="cell-art" :rotate="0.8" size="sm">
           <ResponsiveImage
             :key="effective"
             :picture="heroPicture"
@@ -64,7 +65,7 @@
           />
         </ComicPanel>
 
-        <ComicPanel class="cell cell-current" tone="ink" :rotate="-0.4" size="md">
+        <ComicPanel class="cell-current" tone="ink" :rotate="-0.4" size="md">
           <ul class="status">
             <li v-for="row in statusRows" :key="row.label" class="status-row">
               <span class="status-label">{{ row.label }}</span>
@@ -87,7 +88,7 @@
           :date="item.date"
         >
           <ul v-if="'tech' in item && item.tech.length" class="chips">
-            <li v-for="t in item.tech" :key="t" class="chip">{{ t }}</li>
+            <li v-for="tech in item.tech" :key="tech" class="chip">{{ tech }}</li>
           </ul>
         </EntryCard>
       </div>

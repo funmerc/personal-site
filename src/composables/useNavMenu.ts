@@ -2,8 +2,9 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 // Mobile nav sheet state. The `animating` flag is what gates the CSS
-// transition — without it, viewport-crossing into mobile would animate the
-// menu's opacity from desktop (1) to mobile-closed (0) and cause a flash.
+// transition. Without it, dragging the viewport into mobile width would
+// animate the menu's opacity from desktop (1) to mobile-closed (0) and
+// cause a brief flash.
 export function useNavMenu() {
   const open = ref(false)
   const animating = ref(false)
@@ -37,13 +38,17 @@ export function useNavMenu() {
   }
 
   function close() {
-    if (!open.value) return
+    if (!open.value) {
+      return
+    }
     flagAnimating()
     open.value = false
   }
 
-  function onKey(e: KeyboardEvent) {
-    if (e.key === 'Escape') close()
+  function onKey(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      close()
+    }
   }
 
   onMounted(() => {

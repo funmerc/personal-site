@@ -155,8 +155,8 @@
   background-size: 8px 8px;
 }
 
-/* Comic action text — POW!, BAM!, etc.
-   Override rotation per-instance: style="--action-rotate: 6deg;" */
+/* Comic action text like POW!, BAM!, etc.
+   Override the rotation per instance with style="--action-rotate: 6deg;". */
 @utility action-text {
   font-family: var(--font-display), cursive;
   font-size: clamp(2.5rem, 5vw, 4rem);
@@ -169,7 +169,7 @@
   transform: rotate(var(--action-rotate, -4deg));
 }
 
-/* Outlined pill — used for tags, interests, tech, coursework. */
+/* Outlined pill used for tags, interests, tech, coursework. */
 @utility chip {
   display: inline-flex;
   align-items: center;
@@ -194,7 +194,7 @@
   font-size: 1rem;
   line-height: 1.7;
   max-width: 65ch;
-  /* Flex item inside ComicPanel — without this, a long <pre> line sets
+  /* Flex item inside ComicPanel. Without this, a long <pre> line sets
      min-content and overflows the panel instead of scrolling inside. */
   min-width: 0;
 }
@@ -285,10 +285,10 @@
   margin: 1.5rem 0;
 }
 
-/* Shiki fenced-code blocks. Output is generated with defaultColor: false,
+/* Shiki fenced code blocks. Output is generated with defaultColor: false,
    so each token carries both --shiki-light and --shiki-dark CSS variables.
-   We pick one based on the active theme — same activation paths as the
-   site tokens above. */
+   We pick one based on the active theme, using the same activation paths
+   as the site tokens above. */
 .prose .shiki {
   color: var(--shiki-light);
   background-color: var(--shiki-light-bg);
@@ -321,8 +321,9 @@
 /* ============================================================
    PAGE PRIMITIVES
    Shared building blocks for index and detail routes. Each page
-   was duplicating these scoped — they're textually identical, so
-   they live here instead of in every page's <style scoped>.
+   used to duplicate these in its scoped block. They're textually
+   identical, so they live here instead of in every page's
+   <style scoped>.
    ============================================================ */
 
 .page {
@@ -469,9 +470,9 @@
    INTERACTIONS
    ============================================================ */
 
-/* Peek hover — lifts current element to reveal "next page" beneath.
-   Apply to nav links, buttons, cards. The underlying "page" sliver
-   uses a pseudo-element so no extra markup needed. */
+/* Peek hover. Lifts the current element to reveal a "next page" sliver
+   beneath. Apply it to nav links, buttons, and cards. The underlying
+   sliver uses a pseudo element so no extra markup is needed. */
 @utility peek {
   position: relative;
   display: inline-block;
@@ -503,8 +504,9 @@
 
 /* ============================================================
    ROUTE PAGE CONTAINER
-   Each route renders a <section> directly inside <main>. The section is
-   an invisible container — visual framing is done with <ComicPanel>.
+   Each route renders a <section> directly inside <main>. The section
+   is an invisible container; the visual framing is handled by
+   <ComicPanel>.
    ============================================================ */
 
 main > section {

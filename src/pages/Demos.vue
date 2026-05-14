@@ -49,25 +49,25 @@
       <p class="lead">First batch of experiments is being prepped.</p>
     </ComicPanel>
     <EntryCard
-      v-for="(d, i) in demos"
-      :key="d.slug"
-      :to="`/demos/${d.slug}`"
-      :title="d.title"
-      :summary="d.summary"
-      :date="d.date"
-      :tone="i % 2 === 0 ? 'paper' : 'ink'"
-      :rotate="i % 2 === 0 ? -0.4 : 0.4"
+      v-for="(demo, index) in demos"
+      :key="demo.slug"
+      :to="`/demos/${demo.slug}`"
+      :title="demo.title"
+      :summary="demo.summary"
+      :date="demo.date"
+      :tone="index % 2 === 0 ? 'paper' : 'ink'"
+      :rotate="index % 2 === 0 ? -0.4 : 0.4"
     >
       <ul
-        v-if="d.tech.length || d.tags?.length"
+        v-if="demo.tech.length || demo.tags?.length"
         class="chips"
       >
         <li
-          v-for="t in [...d.tech, ...(d.tags ?? [])]"
-          :key="t"
+          v-for="tag in [...demo.tech, ...(demo.tags ?? [])]"
+          :key="tag"
           class="chip"
         >
-          {{ t }}
+          {{ tag }}
         </li>
       </ul>
     </EntryCard>

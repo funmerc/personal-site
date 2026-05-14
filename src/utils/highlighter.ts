@@ -1,7 +1,7 @@
 /**
- * Thin lazy wrapper around the Shiki bundle. The first call dynamic-imports
- * the heavy module (langs + themes + JS regex engine), every subsequent call
- * reuses the same singleton.
+ * Lazy wrapper around the Shiki bundle. The first call dynamic imports the
+ * heavy module (langs, themes, and the JS regex engine), and every later
+ * call reuses the same singleton.
  */
 let bundlePromise: Promise<typeof import('./shikiBundle')> | null = null
 

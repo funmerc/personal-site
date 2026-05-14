@@ -24,16 +24,16 @@
 <template>
   <IndexLayout title="Uses" :rotate-title="-0.4" :loading="!loaded">
     <ComicPanel
-      v-for="(s, i) in uses.sections"
-      :key="s.label"
-      :tone="i % 2 === 0 ? 'paper' : 'ink'"
-      :rotate="i % 2 === 0 ? -0.4 : 0.4"
+      v-for="(section, index) in uses.sections"
+      :key="section.label"
+      :tone="index % 2 === 0 ? 'paper' : 'ink'"
+      :rotate="index % 2 === 0 ? -0.4 : 0.4"
       size="md"
       class="section"
     >
-      <h2 class="section-label">{{ s.label }}</h2>
+      <h2 class="section-label">{{ section.label }}</h2>
       <ul class="chips">
-        <li v-for="item in s.items" :key="item" class="chip">{{ item }}</li>
+        <li v-for="item in section.items" :key="item" class="chip">{{ item }}</li>
       </ul>
     </ComicPanel>
   </IndexLayout>

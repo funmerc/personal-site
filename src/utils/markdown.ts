@@ -7,12 +7,12 @@ marked.setOptions({
   async: true,
 })
 
-// Override the link renderer so absolute URLs open in a new tab. Internal
-// links (starting with `/`) are left as plain anchors — useProseLinks handles
-// routing them through Vue Router at click time.
+// The link renderer is overridden so absolute URLs open in a new tab.
+// Internal links (starting with `/`) are left as plain anchors, and
+// useProseLinks intercepts the clicks so Vue Router handles routing.
 //
-// Code blocks are highlighted with Shiki. Highlighting is async so it runs
-// in walkTokens (which marked awaits), and the sync code renderer just
+// Code blocks are highlighted with Shiki. Highlighting is async, so it runs
+// inside walkTokens (which marked awaits) and the sync code renderer just
 // returns the pre-rendered HTML stashed on the token.
 type HighlightedCode = Tokens.Code & { highlighted?: string }
 
@@ -20,8 +20,11 @@ marked.use({
   async: true,
   walkTokens: async (token) => {
     if (token.type === 'code') {
-      const t = token as HighlightedCode
-      t.highlighted = await highlight(t.text, t.lang ?? '')
+      const codeToken = token as HighlightedCode
+      codeToken.highlighted = await highlight(
+        codeToken.text,
+        codeToken.lang ?? '',
+      )
     }
   },
   renderer: {
@@ -39,12 +42,13 @@ marked.use({
 })
 
 /**
- * Render a markdown source string to HTML. Content is author-controlled
- * (loaded from our own JSON files), so no sanitizer is applied — if that
- * assumption ever changes, run the output through DOMPurify before injection.
+ * Render a markdown source string to HTML. Content is author controlled
+ * (loaded from our own JSON files), so no sanitizer is applied. If that
+ * assumption ever changes, run the output through DOMPurify before
+ * injection.
  *
- * Async because Shiki (used for fenced-code highlighting) loads lazily.
+ * Async because Shiki (used for fenced code highlighting) loads lazily.
  */
-export async function renderMarkdown(md: string): Promise<string> {
-  return (await marked.parse(md, { async: true })) as string
+export async function renderMarkdown(source: string): Promise<string> {
+  return (await marked.parse(source, { async: true })) as string
 }

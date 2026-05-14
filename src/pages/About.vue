@@ -73,8 +73,12 @@
           <div class="entry-section">
             <h4 class="entry-section-label">Relevant coursework</h4>
             <ul class="chips">
-              <li v-for="c in item.relevant_coursework" :key="c" class="chip">
-                {{ c }}
+              <li
+                v-for="course in item.relevant_coursework"
+                :key="course"
+                class="chip"
+              >
+                {{ course }}
               </li>
             </ul>
           </div>
@@ -85,11 +89,19 @@
         <h2 class="section-title">What I'm into</h2>
         <h3 class="sub">Interests</h3>
         <ul class="chips">
-          <li v-for="i in about.interests" :key="i" class="chip">{{ i }}</li>
+          <li
+            v-for="interest in about.interests"
+            :key="interest"
+            class="chip"
+          >
+            {{ interest }}
+          </li>
         </ul>
         <h3 class="sub">Goals</h3>
         <ul class="chips">
-          <li v-for="g in about.goals" :key="g" class="chip">{{ g }}</li>
+          <li v-for="goal in about.goals" :key="goal" class="chip">
+            {{ goal }}
+          </li>
         </ul>
       </ComicPanel>
 
@@ -117,10 +129,16 @@
           >
             <h4 class="entry-section-label">{{ section.label }}</h4>
             <ul v-if="section.label === 'Key Technologies'" class="chips">
-              <li v-for="v in section.values" :key="v" class="chip">{{ v }}</li>
+              <li
+                v-for="value in section.values"
+                :key="value"
+                class="chip"
+              >
+                {{ value }}
+              </li>
             </ul>
             <ul v-else class="bullets">
-              <li v-for="v in section.values" :key="v">{{ v }}</li>
+              <li v-for="value in section.values" :key="value">{{ value }}</li>
             </ul>
           </div>
         </article>

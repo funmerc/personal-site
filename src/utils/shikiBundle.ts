@@ -1,7 +1,7 @@
 /**
- * Heavy Shiki bundle: explicit themes + languages, JS regex engine (no wasm).
- * Loaded only when a code block actually needs highlighting (via the dynamic
- * import in highlighter.ts).
+ * The heavy Shiki bundle. Pulls in the themes, languages, and JS regex
+ * engine we use (no wasm). Loaded only when a code block actually needs
+ * highlighting, via the dynamic import in highlighter.ts.
  */
 import { createHighlighterCore } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
@@ -41,8 +41,8 @@ const highlighter = createHighlighterCore({
   engine: createJavaScriptRegexEngine(),
 })
 
-function escapeHtml(s: string): string {
-  return s
+function escapeHtml(value: string): string {
+  return value
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

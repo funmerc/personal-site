@@ -36,7 +36,9 @@
 
   const embedSrc = computed(() => {
     const src = demo.value?.embed
-    if (!src) return ''
+    if (!src) {
+      return ''
+    }
     if (import.meta.env.DEV && src.startsWith(LABS_PROD_ORIGIN)) {
       return LABS_DEV_ORIGIN + src.slice(LABS_PROD_ORIGIN.length)
     }
@@ -106,7 +108,7 @@
         </header>
 
         <ul v-if="demo.tech.length" class="chips">
-          <li v-for="t in demo.tech" :key="t" class="chip">{{ t }}</li>
+          <li v-for="tech in demo.tech" :key="tech" class="chip">{{ tech }}</li>
         </ul>
 
         <div
@@ -157,7 +159,7 @@
         </div>
 
         <ul v-if="demo.tags?.length" class="tags">
-          <li v-for="t in demo.tags" :key="t" class="chip">{{ t }}</li>
+          <li v-for="tag in demo.tags" :key="tag" class="chip">{{ tag }}</li>
         </ul>
       </template>
       <template v-else>

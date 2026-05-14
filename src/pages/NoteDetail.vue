@@ -47,7 +47,7 @@
           </header>
           <div ref="proseEl" class="prose" v-html="bodyHtml" />
           <ul v-if="note.tags?.length" class="tags">
-            <li v-for="t in note.tags" :key="t" class="chip">{{ t }}</li>
+            <li v-for="tag in note.tags" :key="tag" class="chip">{{ tag }}</li>
           </ul>
         </template>
         <template v-else>

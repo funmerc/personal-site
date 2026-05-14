@@ -56,7 +56,7 @@
         </header>
 
         <ul v-if="project.tech.length" class="chips">
-          <li v-for="t in project.tech" :key="t" class="chip">{{ t }}</li>
+          <li v-for="tech in project.tech" :key="tech" class="chip">{{ tech }}</li>
         </ul>
 
         <div
@@ -95,7 +95,7 @@
         <div v-if="bodyHtml" ref="proseEl" class="prose" v-html="bodyHtml" />
 
         <ul v-if="project.tags?.length" class="tags">
-          <li v-for="t in project.tags" :key="t" class="chip">{{ t }}</li>
+          <li v-for="tag in project.tags" :key="tag" class="chip">{{ tag }}</li>
         </ul>
       </template>
       <template v-else>
