@@ -11,11 +11,11 @@
       },
       {
         "label": "Responsibilities",
-        "values": ["Main engineer and contact for 3 applications", "Main engineer and contact for 2 shared modules", "Provide support to other frontend applications as needed", "To conduct root cause analysis, Internal customer issue discovery and communication", "Provide support to API applications as needed", "Feature vision development", "Mock development", "Code Review", "Engineering support", "Security enhancement"]
+        "values": ["Main engineer and contact for 3 production applications.", "Main engineer and contact for 2 shared production modules.", "Provide support to other frontend applications as needed.", "To conduct root cause analysis, Internal customer issue discovery and communication.", "Provide support to API applications as needed.", "Feature vision development.", "Mock development.", "Code Review.", "Engineering support.", "Security enhancement."]
       },
       {
         "label": "Accomplishments",
-        "values": ["Regarded as a subject matter expert in the domain", "Main point of contact to assist with production issues", "Architected, Designed, implemented solutions to multiple complex problems", "Main point of contact for assisting other developers"]
+        "values": ["Regarded as a subject matter expert in the domain.", "Main point of contact to assist with production issues.", "Architected, Designed, implemented solutions to multiple complex problems.", "Main point of contact for assisting other developers."]
       }
     ]
   },
@@ -31,11 +31,11 @@
       },
       {
         "label": "Responsibilities",
-        "values": ["Software development", "Communication in cross-project/cross-team environments", "Planning and estimating work", "Debugging production issues across applications"]
+        "values": ["Software development.", "Communication in cross-project/cross-team environments.", "Planning and estimating work.", "Debugging production issues across applications."]
       },
       {
         "label": "Accomplishments",
-        "values": ["Lead a team in time sensitive feature development work", "Trained multiple aspiring engineers", "Regarded as a subject matter expert in the domain"]
+        "values": ["Lead a team in time sensitive feature development work.", "Trained multiple aspiring engineers.", "Regarded as a subject matter expert in the domain."]
       }
     ]
   },
@@ -51,11 +51,11 @@
       },
       {
         "label": "Responsibilities",
-        "values": ["Develop and maintain REST and SOAP APIs", "Enhance system performance and reliability", "Skillfully debug and resolve issues within internal applications", "Contribute to improved stability and user experience", "Optimize code efficiency and maintainability"]
+        "values": ["Develop and maintain REST and SOAP APIs.", "Enhance system performance and reliability.", "Skillfully debug and resolve issues within internal applications.", "Contribute to improved stability and user experience.", "Optimize code efficiency and maintainability."]
       },
       {
         "label": "Accomplishments",
-        "values": ["Solved a ghost bug", "Successfully created a React-based interface, integrated with a Google Chrome extension", "Spearheaded the refactoring of core web service functionality"]
+        "values": ["Solved a ghost bug.", "Successfully created a React-based interface, integrated with a Google Chrome extension.", "Spearheaded the refactoring of core web service functionality."]
       }
     ]
   },
@@ -71,11 +71,11 @@
       },
       {
         "label": "Responsibilities",
-        "values": ["Learning the systems", "Debugging", "Application enhancement", "Teamwork and integration"]
+        "values": ["Learning the systems.", "Debugging.", "Application enhancement.", "Teamwork and integration."]
       },
       {
         "label": "Accomplishments",
-        "values": ["Collaborated in the design and implementation of a new software solution", "Demoed solution across teams"]
+        "values": ["Collaborated in the design and implementation of a new software solution.", "Demoed solution across teams."]
       }
     ]
   }

@@ -22,10 +22,9 @@ describe('Demos page', () => {
     expect(w.find('h1').text()).toBe('Demos')
   })
 
-  it('shows the empty state when demos.json is empty', () => {
+  it('renders demo entries from demos.json', () => {
     const w = mountPage()
-    expect(w.find('.lead').text()).toContain('experiments')
-    expect(w.findAll('a.entry-link')).toHaveLength(0)
+    expect(w.findAll('a.entry-link').length).toBeGreaterThan(0)
   })
 
   it('renders the banner picture via the imagetools stub', () => {

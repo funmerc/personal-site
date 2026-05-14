@@ -27,6 +27,7 @@ export interface Demo extends BaseEntry {
   tech: string[]
   cover?: string
   body?: string
+  embed?: string
   links?: {
     live?: string
     repo?: string

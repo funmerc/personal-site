@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "slug": "ai-transformer",
+    "title": "AI transformer explainer",
+    "summary": "An interactive look at how a transformer actually turns text into predictions.",
+    "date": "2026-05-14",
+    "status": "published",
+    "tech": ["JavaScript", "HTML", "Canvas"],
+    "tags": ["ai", "transformers", "explainer", "embed"],
+    "body": "A little playground for poking at how a transformer actually processes text. It walks through tokenization, embeddings, attention, and the path from input to predicting the next token. The kind of explainer I wish I had when I first started reading the papers.\n\nThe embed below is the live demo. It listens for a theme message from this site, so flipping the site between light and dark flips the demo too.",
+    "embed": "https://funmerc.github.io/labs/ai/transformers/",
+    "links": {
+      "live": "https://funmerc.github.io/labs/ai/transformers/",
+      "repo": "https://github.com/funmerc/labs"
+    }
+  }
+]
