@@ -1,5 +1,20 @@
 [
   {
+    "slug": "ai-tokenizer",
+    "title": "AI tokenizer demo",
+    "summary": "A tiny playground for seeing how text gets chopped into tokens before a model ever sees it.",
+    "date": "2026-05-17",
+    "status": "published",
+    "tech": ["JavaScript", "HTML"],
+    "tags": ["ai", "tokenizer", "explainer", "embed"],
+    "body": "A little demo for poking at how text turns into tokens. Type something in, watch it get broken down, and get a feel for why models think in chunks instead of letters or words.\n\nThe embed below is the live demo. It listens for a theme message from this site, so flipping the site between light and dark flips the demo too.",
+    "embed": "https://funmerc.github.io/labs/ai/tokenizer/",
+    "links": {
+      "live": "https://funmerc.github.io/labs/ai/tokenizer/",
+      "repo": "https://github.com/funmerc/labs"
+    }
+  },
+  {
     "slug": "ai-transformer",
     "title": "AI transformer explainer",
     "summary": "An interactive look at how a transformer actually turns text into predictions.",
