@@ -1,5 +1,20 @@
 [
   {
+    "slug": "ai-neural-network",
+    "title": "AI neural network demo",
+    "summary": "A visual walkthrough of how a neural network is wired up and how it actually learns.",
+    "date": "2026-05-20",
+    "status": "published",
+    "tech": ["JavaScript", "HTML", "Canvas"],
+    "tags": ["ai", "neural network", "explainer", "embed"],
+    "body": "A little visual walkthrough of how a neural network works under the hood. It steps through the Network, a single Neuron, the Forward Pass, Training, and where this stuff actually gets Used, with a simulation running alongside each section so the math feels less abstract.\n\nThe embed below is the live demo.",
+    "embed": "https://funmerc.github.io/labs/ai/neural-network/",
+    "links": {
+      "live": "https://funmerc.github.io/labs/ai/neural-network/",
+      "repo": "https://github.com/funmerc/labs"
+    }
+  },
+  {
     "slug": "ai-tokenizer",
     "title": "AI tokenizer demo",
     "summary": "A tiny playground for seeing how text gets chopped into tokens before a model ever sees it.",
