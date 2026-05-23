@@ -3,10 +3,9 @@
   import { useRouteMeta } from '../composables/useRouteMeta'
   import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
-  import usesData from '../data/uses.json'
-  import type { UsesData } from '../data/types'
+  import { getUses, type UsesResponse } from '../api'
 
-  const uses = usesData as UsesData
+  const uses = ref<UsesResponse | null>(null)
 
   useRouteMeta({
     title: 'Uses',
@@ -14,17 +13,16 @@
   })
 
   const loaded = ref(false)
-  onMounted(() => {
-    requestAnimationFrame(() => {
-      loaded.value = true
-    })
+  onMounted(async () => {
+    uses.value = await getUses()
+    loaded.value = true
   })
 </script>
 
 <template>
   <IndexLayout title="Uses" :rotate-title="-0.4" :loading="!loaded">
     <ComicPanel
-      v-for="(section, index) in uses.sections"
+      v-for="(section, index) in uses?.sections ?? []"
       :key="section.label"
       :tone="index % 2 === 0 ? 'paper' : 'ink'"
       :rotate="index % 2 === 0 ? -0.4 : 0.4"

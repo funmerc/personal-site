@@ -3,7 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { createHead } from '@unhead/vue/client'
 import NoteDetail from '../NoteDetail.vue'
-import { getNotes } from '../../content'
+import { notesFixture } from '../../test/api-fixtures'
 
 async function mountAt(slug: string) {
   const router = createRouter({
@@ -17,20 +17,20 @@ async function mountAt(slug: string) {
   await router.isReady()
   const head = createHead()
   const wrapper = mount(NoteDetail, { global: { plugins: [router, head] } })
+  await flushPromises()
   return wrapper
 }
 
 describe('NoteDetail page', () => {
   it('renders the note title for an existing slug', async () => {
-    const note = getNotes()[0]
-    expect(note).toBeDefined()
-    const w = await mountAt(note!.slug)
-    expect(w.find('h1').text()).toBe(note!.title)
+    const note = notesFixture[0]!
+    const w = await mountAt(note.slug)
+    expect(w.find('h1').text()).toBe(note.title)
   })
 
   it('renders a back link to /notes for an existing note', async () => {
-    const note = getNotes()[0]
-    const w = await mountAt(note!.slug)
+    const note = notesFixture[0]!
+    const w = await mountAt(note.slug)
     expect(w.find('a.back-tab').attributes('href')).toBe('/notes')
   })
 

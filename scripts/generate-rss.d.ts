@@ -1,2 +1,2 @@
-export function generateRssString(): string
-export function generateRss(): void
+export function generateRssString(): Promise<string>
+export function generateRss(): Promise<void>

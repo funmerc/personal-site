@@ -1,28 +1,40 @@
 <script setup lang="ts">
-  import { computed, ref, watchEffect } from 'vue'
+  import { ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import { useProseLinks } from '../composables/useProseLinks'
   import ComicPanel from '../components/ComicPanel.vue'
   import Loader from '../components/Loader.vue'
-  import { getNote } from '../content'
+  import { getNote, type Note } from '../api'
   import { formatDate } from '../utils/formatDate'
   import { renderMarkdown } from '../utils/markdown'
 
   const route = useRoute()
-  const note = computed(() => getNote(String(route.params.slug)))
-
+  const note = ref<Note | null>(null)
   const bodyHtml = ref('')
   const loaded = ref(false)
-  watchEffect(async () => {
-    if (!note.value) {
-      bodyHtml.value = ''
-      loaded.value = true
-      return
+
+  async function loadNote(slug: string) {
+    loaded.value = false
+    note.value = null
+    bodyHtml.value = ''
+    const result = await getNote(slug)
+    note.value = result ?? null
+    if (result) {
+      bodyHtml.value = await renderMarkdown(result.body)
     }
-    bodyHtml.value = await renderMarkdown(note.value.body)
     loaded.value = true
-  })
+  }
+
+  watch(
+    () => route.params.slug,
+    (slug) => {
+      if (typeof slug === 'string' && slug.length) {
+        loadNote(slug)
+      }
+    },
+    { immediate: true },
+  )
 
   const proseEl = ref<HTMLElement | null>(null)
   useProseLinks(proseEl)
@@ -50,7 +62,7 @@
             <li v-for="tag in note.tags" :key="tag" class="chip">{{ tag }}</li>
           </ul>
         </template>
-        <template v-else>
+        <template v-else-if="loaded">
           <h1>Not found</h1>
           <p class="lead">
             No note with that slug.
@@ -74,4 +86,3 @@
     opacity: 0;
   }
 </style>
-

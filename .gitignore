@@ -25,3 +25,6 @@ dist-ssr
 
 # Notes
 TODO.md
+
+# Local
+.env

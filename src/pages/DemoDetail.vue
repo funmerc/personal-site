@@ -6,24 +6,36 @@
   import { useTheme } from '../composables/useTheme'
   import ComicPanel from '../components/ComicPanel.vue'
   import Loader from '../components/Loader.vue'
-  import { getDemo } from '../content'
+  import { getDemo, type Demo } from '../api'
   import { formatDate } from '../utils/formatDate'
   import { renderMarkdown } from '../utils/markdown'
 
   const route = useRoute()
-  const demo = computed(() => getDemo(String(route.params.slug)))
-
+  const demo = ref<Demo | null>(null)
   const bodyHtml = ref('')
   const loaded = ref(false)
-  watchEffect(async () => {
-    if (!demo.value?.body) {
-      bodyHtml.value = ''
-      loaded.value = true
-      return
+
+  async function loadDemo(slug: string) {
+    loaded.value = false
+    demo.value = null
+    bodyHtml.value = ''
+    const result = await getDemo(slug)
+    demo.value = result ?? null
+    if (result?.body) {
+      bodyHtml.value = await renderMarkdown(result.body)
     }
-    bodyHtml.value = await renderMarkdown(demo.value.body)
     loaded.value = true
-  })
+  }
+
+  watch(
+    () => route.params.slug,
+    (slug) => {
+      if (typeof slug === 'string' && slug.length) {
+        loadDemo(slug)
+      }
+    },
+    { immediate: true },
+  )
 
   const proseEl = ref<HTMLElement | null>(null)
   useProseLinks(proseEl)
@@ -162,7 +174,7 @@
           <li v-for="tag in demo.tags" :key="tag" class="chip">{{ tag }}</li>
         </ul>
       </template>
-      <template v-else>
+      <template v-else-if="loaded">
         <h1>Not found</h1>
         <p class="lead">
           No demo with that slug.
@@ -228,4 +240,3 @@
     opacity: 0.6;
   }
 </style>
-

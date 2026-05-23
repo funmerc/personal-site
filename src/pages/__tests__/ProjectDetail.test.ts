@@ -3,7 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { createHead } from '@unhead/vue/client'
 import ProjectDetail from '../ProjectDetail.vue'
-import { getProjects } from '../../content'
+import { projectsFixture } from '../../test/api-fixtures'
 
 async function mountAt(slug: string) {
   const router = createRouter({
@@ -16,29 +16,30 @@ async function mountAt(slug: string) {
   await router.push(`/projects/${slug}`)
   await router.isReady()
   const head = createHead()
-  return mount(ProjectDetail, { global: { plugins: [router, head] } })
+  const wrapper = mount(ProjectDetail, { global: { plugins: [router, head] } })
+  await flushPromises()
+  return wrapper
 }
 
 describe('ProjectDetail page', () => {
   it('renders the project title for an existing slug', async () => {
-    const project = getProjects()[0]
-    expect(project).toBeDefined()
-    const w = await mountAt(project!.slug)
-    expect(w.find('h1').text()).toBe(project!.title)
+    const project = projectsFixture[0]!
+    const w = await mountAt(project.slug)
+    expect(w.find('h1').text()).toBe(project.title)
   })
 
   it('renders the summary paragraph', async () => {
-    const project = getProjects()[0]
-    const w = await mountAt(project!.slug)
-    expect(w.find('.summary').text()).toBe(project!.summary)
+    const project = projectsFixture[0]!
+    const w = await mountAt(project.slug)
+    expect(w.find('.summary').text()).toBe(project.summary)
   })
 
   it('renders external links when present', async () => {
-    const project = getProjects()[0]
-    const w = await mountAt(project!.slug)
-    if (project!.links?.live) {
+    const project = projectsFixture[0]!
+    const w = await mountAt(project.slug)
+    if (project.links?.live) {
       const liveLink = w.findAll('a.ext').find((a) => a.text().includes('Live'))
-      expect(liveLink?.attributes('href')).toBe(project!.links.live)
+      expect(liveLink?.attributes('href')).toBe(project.links.live)
     }
   })
 
