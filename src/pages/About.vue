@@ -5,30 +5,48 @@
   import IndexLayout from '../components/IndexLayout.vue'
   import ComicPanel from '../components/ComicPanel.vue'
   import ResponsiveImage from '../components/ResponsiveImage.vue'
-  import aboutData from '../data/about.json'
-  import educationData from '../data/education.json'
-  import workData from '../data/work_experience.json'
-  import type { AboutData, EducationData, WorkRole } from '../data/types'
+  import {
+    getAbout,
+    getEducation,
+    getWork,
+    type AboutResponse,
+    type EducationResponse,
+    type WorkRole,
+  } from '../api'
   import banner from '../assets/comic-hero-banner.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
   import bannerNight from '../assets/comic-hero-banner-night.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
 
-  const about = aboutData as AboutData
-  const education = educationData as EducationData
-  const work = workData as WorkRole[]
+  const about = ref<AboutResponse | null>(null)
+  const education = ref<EducationResponse | null>(null)
+  const work = ref<WorkRole[]>([])
 
   const { effective } = useTheme()
   const bannerPicture = computed(() =>
     effective.value === 'dark' ? bannerNight : banner,
   )
 
-  const loaded = ref(false)
+  // Loader stays up until all three API calls AND the banner image are ready.
+  const dataReady = ref(false)
+  const bannerReady = ref(false)
+  const loaded = computed(() => dataReady.value && bannerReady.value)
+
   function onBannerLoad() {
-    loaded.value = true
+    bannerReady.value = true
   }
-  onMounted(() => {
+
+  onMounted(async () => {
     setTimeout(() => {
-      loaded.value = true
+      bannerReady.value = true
     }, 800)
+    const [aboutData, educationData, workData] = await Promise.all([
+      getAbout(),
+      getEducation(),
+      getWork(),
+    ])
+    about.value = aboutData
+    education.value = educationData
+    work.value = workData
+    dataReady.value = true
   })
 
   useRouteMeta({
@@ -49,7 +67,7 @@
       />
     </ComicPanel>
 
-    <div class="grid">
+    <div v-if="about && education" class="grid">
       <ComicPanel class="section" :rotate="-0.3" size="md">
         <h2 class="section-title">Why</h2>
         <p class="prose">{{ about.why }}</p>

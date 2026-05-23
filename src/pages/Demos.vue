@@ -6,25 +6,33 @@
   import ComicPanel from '../components/ComicPanel.vue'
   import EntryCard from '../components/EntryCard.vue'
   import ResponsiveImage from '../components/ResponsiveImage.vue'
-  import { getDemos } from '../content'
+  import { getDemos, type Demo } from '../api'
   import banner from '../assets/comic-hero-zooming.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
   import bannerNight from '../assets/comic-hero-zooming-night.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
 
-  const demos = getDemos()
+  const demos = ref<Demo[]>([])
 
   const { effective } = useTheme()
   const bannerPicture = computed(() =>
     effective.value === 'dark' ? bannerNight : banner,
   )
 
-  const loaded = ref(false)
+  // Two gates: API data and the banner image. Loader hides only once both are
+  // ready (or the safety timer flips the image gate).
+  const dataReady = ref(false)
+  const bannerReady = ref(false)
+  const loaded = computed(() => dataReady.value && bannerReady.value)
+
   function onBannerLoad() {
-    loaded.value = true
+    bannerReady.value = true
   }
-  onMounted(() => {
+
+  onMounted(async () => {
     setTimeout(() => {
-      loaded.value = true
+      bannerReady.value = true
     }, 800)
+    demos.value = await getDemos()
+    dataReady.value = true
   })
 
   useRouteMeta({
@@ -45,7 +53,7 @@
       />
     </ComicPanel>
 
-    <ComicPanel v-if="!demos.length" :rotate="0.3" size="md">
+    <ComicPanel v-if="loaded && !demos.length" :rotate="0.3" size="md">
       <p class="lead">First batch of experiments is being prepped.</p>
     </ComicPanel>
     <EntryCard

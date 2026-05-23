@@ -1,4 +1,4 @@
-import { writeFileSync, readFileSync } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { marked } from 'marked'
 
@@ -6,6 +6,12 @@ const SITE_URL = 'https://jasonrice.me'
 const SITE_TITLE = 'Jason Rice — Notes'
 const SITE_DESCRIPTION = 'Writing on engineering and building.'
 const FEED_PATH = '/rss.xml'
+
+// The API is the source of truth for content. process.env.VITE_API_BASE_URL
+// lets CI/dev override; the workers.dev URL is the safe default.
+const API_BASE =
+  process.env.VITE_API_BASE_URL ??
+  'https://personal-site-api.funmerc.workers.dev'
 
 function escapeXml(s) {
   return String(s)
@@ -20,13 +26,17 @@ function rfc822(dateString) {
   return new Date(`${dateString}T00:00:00Z`).toUTCString()
 }
 
-export function generateRssString() {
-  const notesPath = resolve('src/content/notes.json')
-  const notes = JSON.parse(readFileSync(notesPath, 'utf-8'))
+async function fetchNotes() {
+  const res = await fetch(`${API_BASE}/notes`)
+  if (!res.ok) {
+    throw new Error(`Failed to load /notes from ${API_BASE}: ${res.status}`)
+  }
+  return res.json()
+}
 
-  const published = notes
-    .filter((n) => n.status === 'published')
-    .sort((a, b) => b.date.localeCompare(a.date))
+export async function generateRssString() {
+  // /notes is already filtered to published and sorted date desc by the API.
+  const published = await fetchNotes()
 
   const latestDate = published[0]?.date
   const buildDate = latestDate ? rfc822(latestDate) : new Date().toUTCString()
@@ -65,8 +75,8 @@ export function generateRssString() {
   ].join('\n')
 }
 
-export function generateRss() {
-  const xml = generateRssString()
+export async function generateRss() {
+  const xml = await generateRssString()
   const outPath = resolve('dist', 'rss.xml')
   writeFileSync(outPath, xml, 'utf-8')
   const count = (xml.match(/<item>/g) || []).length

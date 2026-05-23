@@ -14,7 +14,7 @@ function rssDevPlugin(): PluginOption {
         try {
           const { generateRssString } = await import('./scripts/generate-rss.js')
           res.setHeader('Content-Type', 'application/rss+xml; charset=utf-8')
-          res.end(generateRssString())
+          res.end(await generateRssString())
         } catch (err) {
           res.statusCode = 500
           res.end(`RSS generation failed: ${(err as Error).message}`)

@@ -3,26 +3,25 @@
   import { useRouteMeta } from '../composables/useRouteMeta'
   import IndexLayout from '../components/IndexLayout.vue'
   import EntryCard from '../components/EntryCard.vue'
-  import { getNotes } from '../content'
+  import { getNotes, type Note } from '../api'
 
-  const notes = getNotes()
+  const notes = ref<Note[]>([])
+  const loaded = ref(false)
 
   useRouteMeta({
     title: 'Notes',
     description: 'Writing on engineering and building.',
   })
 
-  const loaded = ref(false)
-  onMounted(() => {
-    requestAnimationFrame(() => {
-      loaded.value = true
-    })
+  onMounted(async () => {
+    notes.value = await getNotes()
+    loaded.value = true
   })
 </script>
 
 <template>
   <IndexLayout title="Notes" :rotate-title="-0.8" :loading="!loaded">
-    <p v-if="!notes.length" class="lead">First posts are being drafted.</p>
+    <p v-if="loaded && !notes.length" class="lead">First posts are being drafted.</p>
     <EntryCard
       v-for="(note, index) in notes"
       :key="note.slug"

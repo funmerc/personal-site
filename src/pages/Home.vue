@@ -5,9 +5,7 @@
   import EntryCard from '../components/EntryCard.vue'
   import ResponsiveImage from '../components/ResponsiveImage.vue'
   import Loader from '../components/Loader.vue'
-  import { getRecent } from '../content'
-  import statusData from '../data/status.json'
-  import type { StatusData } from '../data/types'
+  import { getRecent, getStatus, type RecentItem, type StatusResponse } from '../api'
   import comicHero from '../assets/comic-hero.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
   import comicHeroNight from '../assets/comic-hero-night.avif?w=480;800;1200&format=avif;webp;jpeg&as=picture'
 
@@ -15,26 +13,37 @@
   const heroPicture = computed(() =>
     effective.value === 'dark' ? comicHeroNight : comicHero,
   )
-  const recent = getRecent(2)
 
-  const status = statusData as StatusData
-  const statusRows: Array<{ label: string; text: string }> = [
-    { label: 'Currently', text: status.currently },
-    { label: 'Next', text: status.next },
-    { label: 'Future', text: status.future },
-  ]
+  const recent = ref<RecentItem[]>([])
+  const statusRows = ref<Array<{ label: string; text: string }>>([])
 
-  const loaded = ref(false)
+  // Three gates: API data, hero image, and a safety timer. The loader only
+  // lifts once both data and image have arrived (or the safety timer fires for
+  // image-only fallback cases like cached/sync-decode loads).
+  const dataReady = ref(false)
+  const heroReady = ref(false)
+  const loaded = computed(() => dataReady.value && heroReady.value)
+
   function onHeroLoad() {
-    loaded.value = true
+    heroReady.value = true
   }
-  // Safety net for cases where @load never fires, like a cached image with
-  // sync decoding or a browser that skips the event. 800ms is past most
-  // cold loads, so by then we just show the page.
-  onMounted(() => {
+
+  onMounted(async () => {
+    // Safety net: if @load never fires (cached image, sync decode, etc.) flip
+    // the image gate so we still reveal the page.
     setTimeout(() => {
-      loaded.value = true
+      heroReady.value = true
     }, 800)
+
+    const [recentItems, status]: [RecentItem[], StatusResponse] =
+      await Promise.all([getRecent(2), getStatus()])
+    recent.value = recentItems
+    statusRows.value = [
+      { label: 'Currently', text: status.currently },
+      { label: 'Next', text: status.next },
+      { label: 'Future', text: status.future },
+    ]
+    dataReady.value = true
   })
 </script>
 

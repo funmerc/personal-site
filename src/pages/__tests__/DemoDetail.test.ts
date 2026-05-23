@@ -15,12 +15,14 @@ async function mountAt(slug: string) {
   await router.push(`/demos/${slug}`)
   await router.isReady()
   const head = createHead()
-  return mount(DemoDetail, { global: { plugins: [router, head] } })
+  const wrapper = mount(DemoDetail, { global: { plugins: [router, head] } })
+  await flushPromises()
+  return wrapper
 }
 
 describe('DemoDetail page', () => {
-  it('renders the not-found state for any slug (demos index is empty)', async () => {
-    const w = await mountAt('anything')
+  it('renders the not-found state for an unknown slug', async () => {
+    const w = await mountAt('definitely-not-real')
     await flushPromises()
     expect(w.find('h1').text()).toBe('Not found')
     expect(w.find('a.inline-back').attributes('href')).toBe('/demos')
