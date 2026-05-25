@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, watch, watchEffect } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import { useRouteMeta } from '../composables/useRouteMeta'
   import { useProseLinks } from '../composables/useProseLinks'
@@ -40,49 +40,15 @@
   const proseEl = ref<HTMLElement | null>(null)
   useProseLinks(proseEl)
 
-  const LABS_PROD_ORIGIN = 'https://funmerc.github.io/labs'
-  const LABS_DEV_ORIGIN = 'http://localhost:5174'
-
   const embedFrame = ref<HTMLIFrameElement | null>(null)
   const { effective } = useTheme()
 
-  const embedSrc = computed(() => {
-    const src = demo.value?.embed
-    if (!src) {
-      return ''
-    }
-    if (import.meta.env.DEV && src.startsWith(LABS_PROD_ORIGIN)) {
-      return LABS_DEV_ORIGIN + src.slice(LABS_PROD_ORIGIN.length)
-    }
-    return src
-  })
+  const embedSrc = computed(() => demo.value?.embed ?? '')
 
-  // Probe local labs server in dev so we can show a friendly placeholder
-  // instead of the browser's "can't reach this site" page inside the iframe.
-  type EmbedProbe = 'pending' | 'ok' | 'failed'
-  const embedProbe = ref<EmbedProbe>('ok')
-
-  watchEffect(async () => {
-    const src = embedSrc.value
-    if (!src) {
-      embedProbe.value = 'ok'
-      return
-    }
-    if (!import.meta.env.DEV || !src.startsWith(LABS_DEV_ORIGIN)) {
-      embedProbe.value = 'ok'
-      return
-    }
-    embedProbe.value = 'pending'
-    try {
-      const controller = new AbortController()
-      const timer = setTimeout(() => controller.abort(), 1500)
-      await fetch(src, { mode: 'no-cors', signal: controller.signal })
-      clearTimeout(timer)
-      embedProbe.value = 'ok'
-    } catch {
-      embedProbe.value = 'failed'
-    }
-  })
+  // The embed points at the deployed labs site. Locally there's nothing serving
+  // it, and pointing the iframe at a missing URL just loads our own 404 inside
+  // the frame so in dev we skip the iframe and show a link out instead.
+  const isDev = import.meta.env.DEV
 
   function postTheme() {
     embedFrame.value?.contentWindow?.postMessage(
@@ -151,7 +117,7 @@
 
         <div v-if="embedSrc" class="embed">
           <iframe
-            v-if="embedProbe === 'ok'"
+            v-if="!isDev"
             ref="embedFrame"
             :src="embedSrc"
             :title="`${demo.title} — live demo`"
@@ -159,14 +125,14 @@
             referrerpolicy="no-referrer"
             @load="onEmbedLoad"
           />
-          <div v-else-if="embedProbe === 'failed'" class="embed-placeholder">
-            <p class="embed-placeholder__title">Local labs server isn't running.</p>
+          <div v-else class="embed-placeholder">
+            <p class="embed-placeholder__title">Live demo isn't embedded in local dev.</p>
             <p class="embed-placeholder__hint">
-              Start it so it serves <code>{{ embedSrc }}</code>.
+              Open it directly:
+              <a :href="embedSrc" target="_blank" rel="noopener" class="embed-placeholder__link">
+                {{ embedSrc }}
+              </a>
             </p>
-          </div>
-          <div v-else class="embed-placeholder embed-placeholder--probing">
-            <p>Connecting to local labs…</p>
           </div>
         </div>
 
@@ -232,11 +198,8 @@
     opacity: 0.8;
   }
 
-  .embed-placeholder code {
+  .embed-placeholder__link {
+    color: var(--color-signature);
     word-break: break-all;
-  }
-
-  .embed-placeholder--probing {
-    opacity: 0.6;
   }
 </style>
