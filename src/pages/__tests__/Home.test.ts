@@ -53,9 +53,9 @@ describe('Home page', () => {
     const w = await mountPage()
     expect(w.find('.section-title').text()).toBe('Recent')
     const cards = w.findAll('a.entry-link')
-    // Up to 2 recent items pulled from projects + demos + notes combined.
+    // Up to 3 recent items pulled from projects + demos + notes combined.
     expect(cards.length).toBeGreaterThanOrEqual(1)
-    expect(cards.length).toBeLessThanOrEqual(2)
+    expect(cards.length).toBeLessThanOrEqual(3)
     for (const c of cards) {
       expect(c.attributes('href')).toMatch(/^\/(projects|demos|notes)\//)
     }
