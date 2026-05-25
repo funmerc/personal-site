@@ -36,7 +36,7 @@
     }, 800)
 
     const [recentItems, status]: [RecentItem[], StatusResponse] =
-      await Promise.all([getRecent(2), getStatus()])
+      await Promise.all([getRecent(3), getStatus()])
     recent.value = recentItems
     statusRows.value = [
       { label: 'Currently', text: status.currently },
@@ -161,9 +161,16 @@
     gap: 0.35rem;
   }
 
+  /* Two across once there's room, three once the page clears ~1000px. */
   @media (min-width: 50rem) {
     .featured-list {
-      grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 62.5rem) {
+    .featured-list {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
